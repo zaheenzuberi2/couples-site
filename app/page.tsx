@@ -1,56 +1,12 @@
 import Link from "next/link";
+import MarketingHero from "@/components/marketing-hero";
 import { BRAND } from "@/lib/env";
 import { TIER_ORDER, TIERS } from "@/lib/tiers";
 
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
-      <header className="mx-auto flex w-full max-w-5xl items-center px-6 py-6">
-        <span className="font-display text-2xl">{BRAND}</span>
-        <Link
-          href="/login"
-          className="ml-auto text-sm text-muted underline underline-offset-4 hover:text-accent"
-        >
-          Sign in
-        </Link>
-      </header>
-
-      {/* ---------------------------------------------------------- hero */}
-      <section className="mx-auto w-full max-w-3xl px-6 pt-16 pb-24 text-center sm:pt-24">
-        <p className="text-xs tracking-[0.28em] text-muted uppercase">
-          For the two of you
-        </p>
-        <h1 className="mt-6 font-display text-[clamp(2.6rem,8vw,4.75rem)] leading-[1.02]">
-          Send us your photos.
-          <br />
-          Get back a website.
-        </h1>
-        <p className="mx-auto mt-7 max-w-xl leading-relaxed text-muted">
-          Write a few lines, upload the photos you love, and your own page is
-          ready in minutes — your names, your story, your date. Share it with
-          everyone you&apos;re inviting, or keep it just between you.
-        </p>
-
-        <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <Link
-            href="/login"
-            className="bg-accent px-8 py-3.5 text-xs tracking-[0.2em] text-white uppercase"
-          >
-            Start your page
-          </Link>
-          <a
-            href="#how"
-            className="border border-line px-8 py-3.5 text-xs tracking-[0.2em] uppercase hover:border-accent hover:text-accent"
-          >
-            See how it works
-          </a>
-        </div>
-
-        <p className="mt-5 text-xs text-muted">
-          Free to build. From {TIERS.basic.price} when you&apos;re ready to go
-          public.
-        </p>
-      </section>
+      <MarketingHero priceFrom={TIERS.basic.price} />
 
       {/* ----------------------------------------------------- two modes */}
       <section className="border-y border-line bg-card">
