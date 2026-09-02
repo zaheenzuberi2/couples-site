@@ -8,6 +8,7 @@ import {
 } from "@/lib/format";
 import { allowedTheme, tierConfig } from "@/lib/tiers";
 import type { SiteBundle } from "@/lib/types";
+import Hero from "@/components/hero";
 import RsvpForm from "@/components/rsvp-form";
 
 /**
@@ -44,7 +45,6 @@ export default function CouplePage({ bundle }: { bundle: SiteBundle }) {
         site={site}
         heroSrc={heroSrc}
         countdown={countdown}
-        isWedding={isWedding}
         showRsvp={showRsvp}
       />
 
@@ -79,136 +79,6 @@ export default function CouplePage({ bundle }: { bundle: SiteBundle }) {
 
       <Footer site={site} />
     </div>
-  );
-}
-
-/* ---------------------------------------------------------------- hero */
-
-function Hero({
-  site,
-  heroSrc,
-  countdown,
-  isWedding,
-  showRsvp,
-}: {
-  site: SiteBundle["site"];
-  heroSrc: string | null;
-  countdown: number | null;
-  isWedding: boolean;
-  showRsvp: boolean;
-}) {
-  const names = [site.partner_one, site.partner_two].filter(Boolean);
-  const hasPhoto = Boolean(heroSrc);
-
-  return (
-    <section className="relative flex min-h-[92svh] items-center justify-center overflow-hidden px-6 py-24">
-      {heroSrc && (
-        <>
-          <Image
-            src={heroSrc}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          {/* Scrim: keeps the names legible over any photo, light or dark. */}
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(12,10,9,0.42) 0%, rgba(12,10,9,0.22) 38%, rgba(12,10,9,0.58) 100%)",
-            }}
-          />
-        </>
-      )}
-
-      <div
-        className="relative z-10 w-full max-w-3xl text-center"
-        style={hasPhoto ? { color: "#fff" } : undefined}
-      >
-        <p
-          className="eyebrow"
-          style={hasPhoto ? { color: "rgba(255,255,255,0.82)" } : undefined}
-        >
-          {isWedding ? "We're getting married" : "Our story"}
-        </p>
-
-        <h1 className="display mt-6 text-[clamp(2.9rem,11vw,6.5rem)] leading-[0.95]">
-          {names[0]}
-          {names.length === 2 && (
-            <>
-              <span
-                className="mx-3 inline-block align-middle text-[0.52em] italic"
-                style={{
-                  color: hasPhoto ? "rgba(255,255,255,0.75)" : "var(--gilt)",
-                }}
-              >
-                &amp;
-              </span>
-              {names[1]}
-            </>
-          )}
-        </h1>
-
-        {site.tagline.trim() && (
-          <p
-            className="mx-auto mt-7 max-w-lg text-base leading-relaxed sm:text-lg"
-            style={{
-              color: hasPhoto ? "rgba(255,255,255,0.88)" : "var(--whisper)",
-            }}
-          >
-            {site.tagline}
-          </p>
-        )}
-
-        {site.event_date && (
-          <div className="mt-10">
-            <div
-              className="rule-diamond mx-auto max-w-xs"
-              style={hasPhoto ? { color: "rgba(255,255,255,0.45)" } : undefined}
-            >
-              <Diamond />
-            </div>
-            <p className="display mt-6 text-2xl tracking-wide sm:text-3xl">
-              {formatDate(site.event_date)}
-            </p>
-            {countdown !== null && countdown >= 0 && (
-              <p
-                className="eyebrow mt-4"
-                style={
-                  hasPhoto ? { color: "rgba(255,255,255,0.75)" } : undefined
-                }
-              >
-                {countdown === 0
-                  ? "Today"
-                  : countdown === 1
-                    ? "Tomorrow"
-                    : `${countdown} days to go`}
-              </p>
-            )}
-          </div>
-        )}
-
-        {showRsvp && (
-          <a
-            href="#rsvp"
-            className="mt-12 inline-block border px-9 py-3.5 text-xs tracking-[0.22em] uppercase transition-colors duration-300"
-            style={
-              hasPhoto
-                ? {
-                    borderColor: "rgba(255,255,255,0.6)",
-                    color: "#fff",
-                  }
-                : { borderColor: "var(--gilt)", color: "var(--gilt)" }
-            }
-          >
-            RSVP
-          </a>
-        )}
-      </div>
-    </section>
   );
 }
 

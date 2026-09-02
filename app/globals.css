@@ -119,6 +119,13 @@ body {
   background: currentColor;
 }
 
+/* Themed selection on a couple's page - the browser default blue reads as
+   unfinished against a hand-picked palette. */
+[data-theme] ::selection {
+  background: var(--gilt);
+  color: var(--paper);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
