@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { setPaid } from "./actions";
+import { setPaid, setTier } from "./actions";
 import { formatDate } from "@/lib/format";
 import { isAdminEmail, isSupabaseConfigured, siteUrl } from "@/lib/env";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { TIER_ORDER, TIERS } from "@/lib/tiers";
 import type { Site } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -52,6 +53,7 @@ export default async function AdminPage() {
                 <Th>Couple</Th>
                 <Th>Address</Th>
                 <Th>Mode</Th>
+                <Th>Package</Th>
                 <Th>Date</Th>
                 <Th>Status</Th>
                 <Th>Links</Th>
@@ -68,6 +70,28 @@ export default async function AdminPage() {
                     <code className="text-xs">/{site.slug}</code>
                   </Td>
                   <Td className="text-muted">{site.mode}</Td>
+                  <Td>
+                    <form action={setTier} className="flex items-center gap-1.5">
+                      <input type="hidden" name="site_id" value={site.id} />
+                      <select
+                        name="tier"
+                        defaultValue={site.tier}
+                        className="border border-line bg-card px-1.5 py-1 text-xs"
+                      >
+                        {TIER_ORDER.map((t) => (
+                          <option key={t} value={t}>
+                            {TIERS[t].name}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        type="submit"
+                        className="text-[0.65rem] tracking-[0.1em] text-muted uppercase hover:text-accent"
+                      >
+                        Set
+                      </button>
+                    </form>
+                  </Td>
                   <Td className="text-muted">
                     {formatDate(site.event_date) || "—"}
                   </Td>

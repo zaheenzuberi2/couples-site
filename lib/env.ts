@@ -68,8 +68,15 @@ export function isAdminEmail(email: string | null | undefined): boolean {
   return list.includes(email.toLowerCase());
 }
 
-/** What a couple pays to take their page public. Display only. */
-export const PRICE_LABEL = process.env.NEXT_PUBLIC_PRICE_LABEL ?? "PKR 4,000";
+/**
+ * Package prices, display only - the actual feature limits per tier live in
+ * lib/tiers.ts. Kept as env vars so a price change never needs a deploy.
+ */
+export const PRICE_BASIC = process.env.NEXT_PUBLIC_PRICE_BASIC ?? "PKR 3,500";
+export const PRICE_STANDARD =
+  process.env.NEXT_PUBLIC_PRICE_STANDARD ?? "PKR 5,000";
+export const PRICE_PREMIUM =
+  process.env.NEXT_PUBLIC_PRICE_PREMIUM ?? "PKR 7,500";
 
 /** Product name, so rebranding is a one-line change. */
 export const BRAND = process.env.NEXT_PUBLIC_BRAND ?? "Ours";

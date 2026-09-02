@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import CouplePage from "@/components/couple-page";
 import { getSiteByPreviewToken } from "@/lib/data";
-import { PRICE_LABEL, siteUrl } from "@/lib/env";
+import { siteUrl } from "@/lib/env";
+import { tierConfig } from "@/lib/tiers";
 
 /**
  * Private preview. The token in the URL is the only credential, so this page
@@ -24,6 +25,7 @@ export default async function PreviewPage({
   const { site } = bundle;
   const live = site.is_paid && site.is_published;
   const publicUrl = `${siteUrl()}/${site.slug}`;
+  const price = tierConfig(site.tier).price;
 
   return (
     <>
@@ -47,7 +49,7 @@ export default async function PreviewPage({
                 Only people with this link can see it.{" "}
                 {site.is_paid
                   ? "Publish it to go live."
-                  : `Go live at ${publicUrl.replace(/^https?:\/\//, "")} for ${PRICE_LABEL}.`}
+                  : `Go live at ${publicUrl.replace(/^https?:\/\//, "")} for ${price}.`}
               </span>
             </>
           )}

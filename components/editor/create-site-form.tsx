@@ -3,6 +3,8 @@
 import { useActionState, useState } from "react";
 import { createSite, type ActionResult } from "@/app/dashboard/actions";
 import { suggestSlug } from "@/lib/slug";
+import { TIER_ORDER, TIERS } from "@/lib/tiers";
+import type { Tier } from "@/lib/types";
 import { Field, buttonClass, inputClass } from "./ui";
 
 const initial: ActionResult = { ok: true };
@@ -10,6 +12,7 @@ const initial: ActionResult = { ok: true };
 export default function CreateSiteForm() {
   const [state, formAction, pending] = useActionState(createSite, initial);
   const [mode, setMode] = useState<"wedding" | "keepsake">("wedding");
+  const [tier, setTier] = useState<Tier>("standard");
   const [one, setOne] = useState("");
   const [two, setTwo] = useState("");
   const [slug, setSlug] = useState("");
@@ -28,6 +31,7 @@ export default function CreateSiteForm() {
 
       <form action={formAction} className="mt-10 space-y-6">
         <input type="hidden" name="mode" value={mode} />
+        <input type="hidden" name="tier" value={tier} />
         <input type="hidden" name="slug" value={effectiveSlug} />
 
         <fieldset>
@@ -48,6 +52,28 @@ export default function CreateSiteForm() {
               body="Your story, your photos — a gift page, no guest list."
             />
           </div>
+        </fieldset>
+
+        <fieldset>
+          <legend className="block text-xs tracking-[0.16em] text-muted uppercase">
+            Which package?
+          </legend>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            {TIER_ORDER.map((t) => (
+              <TierCard
+                key={t}
+                selected={tier === t}
+                onClick={() => setTier(t)}
+                name={TIERS[t].name}
+                price={TIERS[t].price}
+                tagline={TIERS[t].tagline}
+              />
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-muted">
+            You can start on any package — we&apos;ll confirm it when you message
+            us to go live.
+          </p>
         </fieldset>
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -104,6 +130,39 @@ export default function CreateSiteForm() {
         </button>
       </form>
     </div>
+  );
+}
+
+function TierCard({
+  selected,
+  onClick,
+  name,
+  price,
+  tagline,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  name: string;
+  price: string;
+  tagline: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={`border p-4 text-left transition-colors ${
+        selected
+          ? "border-accent bg-accent-soft"
+          : "border-line bg-card hover:border-accent"
+      }`}
+    >
+      <span className="font-display text-lg">{name}</span>
+      <span className="mt-0.5 block text-sm font-medium">{price}</span>
+      <span className="mt-1 block text-xs leading-relaxed text-muted">
+        {tagline}
+      </span>
+    </button>
   );
 }
 

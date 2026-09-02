@@ -19,6 +19,10 @@ create table if not exists public.sites (
   -- 'keepsake' = love story / anniversary gift page
   mode           text not null default 'wedding' check (mode in ('wedding','keepsake')),
 
+  -- Package purchased. Governs feature limits (see lib/tiers.ts) - enforced
+  -- server-side in dashboard/actions.ts, not just in the UI.
+  tier           text not null default 'standard' check (tier in ('basic','standard','premium')),
+
   -- Paywall. The page is always reachable on its preview_token;
   -- the public /slug route requires is_paid AND is_published.
   is_paid        boolean not null default false,
@@ -105,6 +109,42 @@ drop trigger if exists sites_touch_updated_at on public.sites;
 create trigger sites_touch_updated_at
   before update on public.sites
   for each row execute function public.touch_updated_at();
+
+-- Photo uploads go straight from the browser to Storage/Postgres (see
+-- PhotoManager), bypassing the server actions entirely - so the Basic tier's
+-- 10-photo cap has to be enforced here, not just greyed out in the editor.
+-- Keep in sync with lib/tiers.ts (TIERS.basic.maxPhotos).
+create or replace function public.enforce_photo_limit()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $fn$
+declare
+  site_tier text;
+  max_photos int;
+  current_count int;
+begin
+  select tier into site_tier from public.sites where id = new.site_id;
+
+  max_photos := case site_tier when 'basic' then 10 else null end;
+
+  if max_photos is not null then
+    select count(*) into current_count from public.site_photos where site_id = new.site_id;
+    if current_count >= max_photos then
+      raise exception 'Photo limit reached for the Basic plan (% photos). Upgrade to add more.', max_photos
+        using errcode = 'check_violation';
+    end if;
+  end if;
+
+  return new;
+end;
+$fn$;
+
+drop trigger if exists site_photos_limit on public.site_photos;
+create trigger site_photos_limit
+  before insert on public.site_photos
+  for each row execute function public.enforce_photo_limit();
 
 -- ------------------------------------------------------------
 -- 2. Row Level Security

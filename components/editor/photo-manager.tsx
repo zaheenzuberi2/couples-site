@@ -22,16 +22,21 @@ export default function PhotoManager({
   siteId,
   photos,
   heroPhoto,
+  maxPhotos = Infinity,
 }: {
   siteId: string;
   photos: SitePhoto[];
   heroPhoto: string | null;
+  maxPhotos?: number;
 }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const remaining = Math.max(0, maxPhotos - photos.length);
+  const atLimit = Number.isFinite(maxPhotos) && remaining === 0;
 
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
@@ -47,6 +52,12 @@ export default function PhotoManager({
     for (const [index, file] of chosen.entries()) {
       setProgress(`Uploading ${index + 1} of ${chosen.length}…`);
 
+      if (photos.length + uploaded >= maxPhotos) {
+        failures.push(
+          `${file.name} skipped — you're at your plan's photo limit`
+        );
+        continue;
+      }
       if (!ACCEPTED.includes(file.type)) {
         failures.push(`${file.name} isn't a JPG, PNG or WebP`);
         continue;
@@ -75,9 +86,15 @@ export default function PhotoManager({
       });
 
       if (rowError) {
-        // Don't leave a file nobody can reach.
+        // Don't leave a file nobody can reach. A plan-limit rejection from
+        // the database trigger lands here too, since count can drift if two
+        // uploads race - that failure message is what shows below.
         await supabase.storage.from("couple-photos").remove([path]);
-        failures.push(`${file.name} didn't save`);
+        failures.push(
+          rowError.message.toLowerCase().includes("plan")
+            ? `${file.name} skipped — you're at your plan's photo limit`
+            : `${file.name} didn't save`
+        );
         continue;
       }
 
@@ -94,13 +111,17 @@ export default function PhotoManager({
   return (
     <Section
       title="Photographs"
-      hint="JPG, PNG or WebP, up to 10 MB each. The one you star becomes your cover."
+      hint={
+        Number.isFinite(maxPhotos)
+          ? `JPG, PNG or WebP, up to 10 MB each. ${photos.length} of ${maxPhotos} used on your plan.`
+          : "JPG, PNG or WebP, up to 10 MB each. The one you star becomes your cover."
+      }
     >
       <div
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
-          handleFiles(e.dataTransfer.files);
+          if (!atLimit) handleFiles(e.dataTransfer.files);
         }}
         className="border border-dashed border-line px-6 py-10 text-center"
       >
@@ -109,18 +130,27 @@ export default function PhotoManager({
           type="file"
           accept={ACCEPTED.join(",")}
           multiple
-          disabled={busy}
+          disabled={busy || atLimit}
           onChange={(e) => handleFiles(e.target.files)}
           className="sr-only"
           id="photo-input"
         />
-        <label
-          htmlFor="photo-input"
-          className={`${ghostButtonClass} inline-block cursor-pointer`}
-        >
-          {busy ? "Uploading…" : "Choose photos"}
-        </label>
-        <p className="mt-3 text-xs text-muted">or drag them here</p>
+        {atLimit ? (
+          <p className="text-sm text-muted">
+            You&apos;ve used all {maxPhotos} photos on your plan. Message us to
+            upgrade for unlimited photos.
+          </p>
+        ) : (
+          <>
+            <label
+              htmlFor="photo-input"
+              className={`${ghostButtonClass} inline-block cursor-pointer`}
+            >
+              {busy ? "Uploading…" : "Choose photos"}
+            </label>
+            <p className="mt-3 text-xs text-muted">or drag them here</p>
+          </>
+        )}
         {progress && <p className="mt-2 text-xs text-muted">{progress}</p>}
         {error && (
           <p role="alert" className="mt-3 text-xs text-accent">

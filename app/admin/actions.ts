@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { isAdminEmail } from "@/lib/env";
+import { TIER_ORDER } from "@/lib/tiers";
+import type { Tier } from "@/lib/types";
 
 /**
  * Every admin action re-checks the caller. Server Actions are reachable by
@@ -40,6 +42,27 @@ export async function setPaid(formData: FormData): Promise<void> {
     .from("sites")
     .update({ is_paid: paid, is_published: paid })
     .eq("id", siteId);
+
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+}
+
+/**
+ * Corrects the package on file - the couple's pick at signup is a stated
+ * intent, this is what actually gets billed once payment clears. Downgrading
+ * an already-paid site takes effect immediately: the public page and editor
+ * both re-check the tier on every render, never trusting stored content that
+ * might now exceed the new plan's limits.
+ */
+export async function setTier(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const siteId = String(formData.get("site_id") ?? "");
+  const tier = String(formData.get("tier") ?? "") as Tier;
+  if (!siteId || !TIER_ORDER.includes(tier)) return;
+
+  const db = createAdminClient();
+  await db.from("sites").update({ tier }).eq("id", siteId);
 
   revalidatePath("/admin");
   revalidatePath("/dashboard");

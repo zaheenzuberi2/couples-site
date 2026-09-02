@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { saveDetails, type ActionResult } from "@/app/dashboard/actions";
+import { tierConfig } from "@/lib/tiers";
 import type { Site, ThemeName } from "@/lib/types";
 import { Field, Section, buttonClass, inputClass } from "./ui";
 
@@ -17,6 +18,7 @@ const THEMES: { name: ThemeName; label: string; swatch: string[] }[] = [
 export default function DetailsForm({ site }: { site: Site }) {
   const [state, formAction, pending] = useActionState(saveDetails, initial);
   const isWedding = site.mode === "wedding";
+  const config = tierConfig(site.tier);
 
   return (
     <form action={formAction}>
@@ -110,41 +112,70 @@ export default function DetailsForm({ site }: { site: Site }) {
         />
       </Section>
 
-      <Section title="Look and feel">
+      <Section
+        title="Look and feel"
+        hint={
+          config.themes.length < THEMES.length
+            ? "Premium unlocks every colour theme."
+            : undefined
+        }
+      >
         <fieldset>
           <legend className="sr-only">Colour theme</legend>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {THEMES.map((theme) => (
-              <label
-                key={theme.name}
-                className="cursor-pointer border border-line bg-card p-3 transition-colors has-checked:border-accent has-checked:bg-accent-soft"
-              >
-                <input
-                  type="radio"
-                  name="theme"
-                  value={theme.name}
-                  defaultChecked={site.theme === theme.name}
-                  className="sr-only"
-                />
-                <span className="flex gap-1" aria-hidden>
-                  {theme.swatch.map((colour) => (
-                    <span
-                      key={colour}
-                      className="h-7 flex-1 border border-black/5"
-                      style={{ background: colour }}
-                    />
-                  ))}
-                </span>
-                <span className="mt-2 block text-xs tracking-wide">
-                  {theme.label}
-                </span>
-              </label>
-            ))}
+            {THEMES.map((theme) => {
+              const locked = !config.themes.includes(theme.name);
+              return (
+                <label
+                  key={theme.name}
+                  className={`border border-line bg-card p-3 transition-colors ${
+                    locked
+                      ? "cursor-not-allowed opacity-50"
+                      : "cursor-pointer has-checked:border-accent has-checked:bg-accent-soft"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="theme"
+                    value={theme.name}
+                    disabled={locked}
+                    defaultChecked={site.theme === theme.name}
+                    className="sr-only"
+                  />
+                  <span className="flex gap-1" aria-hidden>
+                    {theme.swatch.map((colour) => (
+                      <span
+                        key={colour}
+                        className="h-7 flex-1 border border-black/5"
+                        style={{ background: colour }}
+                      />
+                    ))}
+                  </span>
+                  <span className="mt-2 flex items-center gap-1.5 text-xs tracking-wide">
+                    {theme.label}
+                    {locked && (
+                      <span className="text-[0.6rem] tracking-[0.1em] text-muted uppercase">
+                        Premium
+                      </span>
+                    )}
+                  </span>
+                </label>
+              );
+            })}
           </div>
         </fieldset>
       </Section>
 
-      {isWedding && (
+      {isWedding && !config.rsvp && (
+        <Section title="Guests">
+          <p className="border border-dashed border-line px-5 py-6 text-sm leading-relaxed text-muted">
+            RSVPs and the event schedule are part of the Standard and Premium
+            packages. Message us to upgrade and they&apos;ll appear here.
+          </p>
+        </Section>
+      )}
+
+      {isWedding && config.rsvp && (
         <Section title="Guests">
           <div className="space-y-5">
             <label className="flex items-start gap-3">

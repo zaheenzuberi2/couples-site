@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { slugify, validateSlug } from "@/lib/slug";
-import type { SiteMode, ThemeName } from "@/lib/types";
+import { allowedTheme, tierConfig, TIER_ORDER } from "@/lib/tiers";
+import type { SiteMode, ThemeName, Tier } from "@/lib/types";
 
 export type ActionResult = { ok: boolean; message?: string };
 
@@ -39,13 +40,13 @@ async function requireOwnedSite(siteId: string) {
   const { supabase, user } = await requireUser();
   const { data: site } = await supabase
     .from("sites")
-    .select("id, owner_id, is_paid, slug")
+    .select("id, owner_id, is_paid, slug, tier")
     .eq("id", siteId)
     .eq("owner_id", user.id)
     .maybeSingle();
 
   if (!site) redirect("/dashboard");
-  return { supabase, user, site };
+  return { supabase, user, site: site as typeof site & { tier: Tier } };
 }
 
 function refresh() {
@@ -70,6 +71,9 @@ export async function createSite(
   const modeRaw = text(formData, "mode") as SiteMode;
   const mode: SiteMode = MODES.includes(modeRaw) ? modeRaw : "wedding";
 
+  const tierRaw = text(formData, "tier") as Tier;
+  const tier: Tier = TIER_ORDER.includes(tierRaw) ? tierRaw : "standard";
+
   const slug = slugify(text(formData, "slug"));
   const check = validateSlug(slug);
   if (!check.ok) return { ok: false, message: check.reason };
@@ -87,6 +91,7 @@ export async function createSite(
     owner_id: user.id,
     slug,
     mode,
+    tier,
     partner_one: partnerOne,
     partner_two: partnerTwo,
   });
@@ -112,8 +117,15 @@ export async function saveDetails(
   const siteId = text(formData, "site_id");
   const { supabase, site } = await requireOwnedSite(siteId);
 
+  // Clamped server-side too, not just greyed out in the editor - a couple
+  // editing the raw form post can't smuggle in a theme or RSVP their tier
+  // doesn't include.
+  const config = tierConfig(site.tier);
   const themeRaw = text(formData, "theme") as ThemeName;
-  const theme: ThemeName = THEMES.includes(themeRaw) ? themeRaw : "blush";
+  const theme = allowedTheme(
+    site.tier,
+    THEMES.includes(themeRaw) ? themeRaw : "blush"
+  );
 
   const patch: Record<string, unknown> = {
     partner_one: text(formData, "partner_one"),
@@ -123,7 +135,7 @@ export async function saveDetails(
     event_date: nullableDate(formData, "event_date"),
     theme,
     venue_note: text(formData, "venue_note"),
-    rsvp_enabled: formData.get("rsvp_enabled") === "on",
+    rsvp_enabled: config.rsvp && formData.get("rsvp_enabled") === "on",
     rsvp_deadline: nullableDate(formData, "rsvp_deadline"),
   };
 
@@ -163,7 +175,11 @@ export async function saveDetails(
 
 export async function addEvent(formData: FormData): Promise<void> {
   const siteId = text(formData, "site_id");
-  const { supabase } = await requireOwnedSite(siteId);
+  const { supabase, site } = await requireOwnedSite(siteId);
+
+  // The events editor is hidden for tiers without this, but the action is
+  // still reachable directly - refuse it the same way.
+  if (!tierConfig(site.tier).events) return;
 
   const { count } = await supabase
     .from("site_events")

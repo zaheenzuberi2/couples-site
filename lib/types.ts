@@ -2,12 +2,16 @@ export type SiteMode = "wedding" | "keepsake";
 
 export type ThemeName = "blush" | "midnight" | "sage" | "gold";
 
+/** Package purchased. See lib/tiers.ts for what each one includes. */
+export type Tier = "basic" | "standard" | "premium";
+
 export type Site = {
   id: string;
   owner_id: string;
   slug: string;
   preview_token: string;
   mode: SiteMode;
+  tier: Tier;
   is_paid: boolean;
   is_published: boolean;
   partner_one: string;

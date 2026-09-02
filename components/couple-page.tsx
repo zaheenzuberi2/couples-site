@@ -6,6 +6,7 @@ import {
   formatDateTime,
   formatMonthYear,
 } from "@/lib/format";
+import { allowedTheme, tierConfig } from "@/lib/tiers";
 import type { SiteBundle } from "@/lib/types";
 import RsvpForm from "@/components/rsvp-form";
 
@@ -16,38 +17,46 @@ import RsvpForm from "@/components/rsvp-form";
  *
  * Every section is skipped when its content is empty, so a half-finished
  * page still looks deliberate rather than broken.
+ *
+ * Tier limits are re-checked here, not just trusted from the stored flags -
+ * if a site is ever downgraded after the fact, the public page should never
+ * show a feature the current plan doesn't include.
  */
 export default function CouplePage({ bundle }: { bundle: SiteBundle }) {
   const { site, events, photos, timeline } = bundle;
   const isWedding = site.mode === "wedding";
+  const config = tierConfig(site.tier);
+  const theme = allowedTheme(site.tier, site.theme);
 
   const heroSrc = photoUrl(site.hero_photo) ?? photoUrl(photos[0]?.image_path);
-  const galleryPhotos = site.hero_photo
-    ? photos
-    : photos.slice(1); // first photo was promoted to the hero
+  const galleryPhotos = (site.hero_photo ? photos : photos.slice(1)).slice(
+    0,
+    config.maxPhotos
+  ); // first photo was promoted to the hero
 
   const countdown = isWedding ? daysUntil(site.event_date) : null;
+  const showEvents = isWedding && config.events && events.length > 0;
+  const showRsvp = isWedding && config.rsvp && site.rsvp_enabled;
 
   return (
-    <div data-theme={site.theme} className="min-h-screen">
+    <div data-theme={theme} className="min-h-screen">
       <Hero
         site={site}
         heroSrc={heroSrc}
         countdown={countdown}
         isWedding={isWedding}
+        showRsvp={showRsvp}
       />
 
       {site.story.trim() && <Story site={site} isWedding={isWedding} />}
 
       {timeline.length > 0 && <Timeline entries={timeline} />}
 
-      {isWedding && events.length > 0 && (
-        <Events events={events} venueNote={site.venue_note} />
-      )}
+      {showEvents && <Events events={events} venueNote={site.venue_note} />}
 
       {galleryPhotos.length > 0 && <Gallery photos={galleryPhotos} />}
 
-      {isWedding && site.rsvp_enabled && (
+      {showRsvp && (
         <section
           id="rsvp"
           className="px-6 py-24 sm:py-32"
@@ -80,11 +89,13 @@ function Hero({
   heroSrc,
   countdown,
   isWedding,
+  showRsvp,
 }: {
   site: SiteBundle["site"];
   heroSrc: string | null;
   countdown: number | null;
   isWedding: boolean;
+  showRsvp: boolean;
 }) {
   const names = [site.partner_one, site.partner_two].filter(Boolean);
   const hasPhoto = Boolean(heroSrc);
@@ -180,7 +191,7 @@ function Hero({
           </div>
         )}
 
-        {isWedding && site.rsvp_enabled && (
+        {showRsvp && (
           <a
             href="#rsvp"
             className="mt-12 inline-block border px-9 py-3.5 text-xs tracking-[0.22em] uppercase transition-colors duration-300"

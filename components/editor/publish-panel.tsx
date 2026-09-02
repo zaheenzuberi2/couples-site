@@ -1,5 +1,5 @@
 import { setPublished } from "@/app/dashboard/actions";
-import { PRICE_LABEL } from "@/lib/env";
+import { tierConfig } from "@/lib/tiers";
 import type { Site } from "@/lib/types";
 
 /**
@@ -18,6 +18,7 @@ export default function PublishPanel({
   highlightUpgrade: boolean;
 }) {
   const live = site.is_paid && site.is_published;
+  const config = tierConfig(site.tier);
 
   return (
     <div
@@ -38,6 +39,15 @@ export default function PublishPanel({
       </div>
 
       <dl className="mt-5 space-y-4 text-sm">
+        <div>
+          <dt className="text-xs tracking-[0.16em] text-muted uppercase">
+            Package
+          </dt>
+          <dd className="mt-1">
+            {config.name} — {config.price}
+          </dd>
+        </div>
+
         <div>
           <dt className="text-xs tracking-[0.16em] text-muted uppercase">
             Private preview link
@@ -79,10 +89,11 @@ export default function PublishPanel({
         {!site.is_paid ? (
           <>
             <p className="text-sm leading-relaxed">
-              Going live costs{" "}
-              <span className="font-medium">{PRICE_LABEL}</span>, once. That
-              buys your public address, unlimited edits and RSVPs for as long as
-              you need them.
+              You picked the{" "}
+              <span className="font-medium">{config.name}</span> package —{" "}
+              <span className="font-medium">{config.price}</span>, once. That
+              buys your public address and everything the {config.name} plan
+              includes, for as long as you need it.
             </p>
             <p className="mt-3 text-sm text-muted">
               Send us a message to pay — we&apos;ll switch your page on the same day.

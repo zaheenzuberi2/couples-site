@@ -79,8 +79,9 @@ SUPABASE_SERVICE_ROLE_KEY=<service role key>
 ADMIN_EMAILS=mzaheen3307@gmail.com
 ```
 
-Optional: `NEXT_PUBLIC_BRAND`, `NEXT_PUBLIC_PRICE_LABEL`,
-`NEXT_PUBLIC_SITE_URL`.
+Optional: `NEXT_PUBLIC_BRAND`, `NEXT_PUBLIC_SITE_URL`,
+`NEXT_PUBLIC_PRICE_BASIC` / `_STANDARD` / `_PREMIUM` (the three package
+prices - see `lib/tiers.ts` for what each package includes).
 
 Everything else derives itself — `siteUrl()` falls back through
 `VERCEL_PROJECT_PRODUCTION_URL` → `VERCEL_URL` → localhost, so preview
