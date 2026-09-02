@@ -110,7 +110,7 @@ export default async function AdminPage() {
                     </form>
                   </Td>
                   <Td className="text-muted">
-                    {formatDate(site.event_date) || "—"}
+                    {formatDate(site.event_date) || "No date"}
                   </Td>
                   <Td>
                     {site.is_paid ? (
@@ -140,7 +140,7 @@ export default async function AdminPage() {
                         </span>
                       </>
                     ) : (
-                      <span className="text-muted">—</span>
+                      <span className="text-muted">Nothing yet</span>
                     )}
                   </Td>
                   <Td>

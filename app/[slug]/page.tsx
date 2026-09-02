@@ -25,7 +25,7 @@ export async function generateMetadata({
     .join(" & ");
   const title =
     site.mode === "wedding" && site.event_date
-      ? `${names} — ${formatDate(site.event_date)}`
+      ? `${names}, ${formatDate(site.event_date)}`
       : names;
 
   const image = photoUrl(site.hero_photo ?? bundle.photos[0]?.image_path);

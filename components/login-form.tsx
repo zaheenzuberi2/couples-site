@@ -30,7 +30,7 @@ export default function LoginForm() {
     if (error) {
       setError(
         error.message.toLowerCase().includes("rate")
-          ? "Too many emails just now — wait a minute and try again."
+          ? "Too many emails just now. Wait a minute and try again."
           : "We couldn't send that. Check the address and try again."
       );
       return;

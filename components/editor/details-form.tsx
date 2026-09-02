@@ -206,7 +206,7 @@ export default function DetailsForm({ site }: { site: Site }) {
             <Field
               label="A note about the venues"
               htmlFor="venue_note"
-              hint="Parking, dress code, directions — anything guests ask twice."
+              hint="Parking, dress code, directions. Anything guests ask twice."
             >
               <textarea
                 id="venue_note"

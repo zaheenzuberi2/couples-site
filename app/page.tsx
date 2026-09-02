@@ -13,11 +13,11 @@ export default function Home() {
         <div className="mx-auto grid max-w-5xl gap-px bg-line sm:grid-cols-2">
           <Mode
             title="A wedding invitation"
-            body="Your names and date up front, every event on the schedule — mehndi, barat, walima — with venues, maps and dress code. Guests RSVP on the page, and the replies land in your dashboard. (Event schedule and RSVPs are on the Standard and Premium packages.)"
+            body="Your names and date up front, and every event on the schedule (mehndi, barat, walima) with venues, maps and dress code. Guests RSVP on the page, and the replies land in your dashboard. (Event schedule and RSVPs are on the Standard and Premium packages.)"
           />
           <Mode
             title="A keepsake"
-            body="No guest list, no schedule. Just how you met, where you've been, and the photographs — laid out like something worth reading twice. An anniversary gift that isn't flowers."
+            body="No guest list, no schedule. Just how you met, where you've been, and the photographs, laid out like something worth reading twice. An anniversary gift that isn't flowers."
           />
         </div>
       </section>
@@ -69,7 +69,7 @@ export default function Home() {
             href="/login"
             className="mt-12 inline-block bg-accent px-8 py-3.5 text-xs tracking-[0.2em] text-white uppercase"
           >
-            Start — it&apos;s free to try
+            Start, it&apos;s free to try
           </Link>
         </div>
       </section>

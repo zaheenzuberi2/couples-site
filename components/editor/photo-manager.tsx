@@ -54,7 +54,7 @@ export default function PhotoManager({
 
       if (photos.length + uploaded >= maxPhotos) {
         failures.push(
-          `${file.name} skipped — you're at your plan's photo limit`
+          `${file.name} skipped, you're at your plan's photo limit`
         );
         continue;
       }
@@ -92,7 +92,7 @@ export default function PhotoManager({
         await supabase.storage.from("couple-photos").remove([path]);
         failures.push(
           rowError.message.toLowerCase().includes("plan")
-            ? `${file.name} skipped — you're at your plan's photo limit`
+            ? `${file.name} skipped, you're at your plan's photo limit`
             : `${file.name} didn't save`
         );
         continue;

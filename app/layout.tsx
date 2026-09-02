@@ -20,7 +20,7 @@ const body = Jost({
 
 export const metadata: Metadata = {
   title: {
-    default: `${BRAND} — a website for the two of you`,
+    default: `${BRAND}, a website for the two of you`,
     template: `%s · ${BRAND}`,
   },
   description:

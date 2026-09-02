@@ -20,7 +20,7 @@ export default function TimelineEditor({
       title="How it happened"
       hint={
         mode === "keepsake"
-          ? "The moments worth keeping — first meeting, first trip, the proposal."
+          ? "The moments worth keeping: first meeting, first trip, the proposal."
           : "Optional. A short timeline your guests will actually read."
       }
     >
@@ -95,7 +95,7 @@ export default function TimelineEditor({
         <input type="hidden" name="site_id" value={siteId} />
         <input
           name="title"
-          placeholder="Add a moment — e.g. The proposal"
+          placeholder="Add a moment (e.g. The proposal)"
           className={`${inputClass} max-w-xs flex-1`}
         />
         <button type="submit" className={ghostButtonClass}>

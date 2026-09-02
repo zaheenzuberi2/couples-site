@@ -10,7 +10,7 @@ export default function NotFound() {
         </p>
         <h1 className="mt-5 font-display text-5xl">Page not found</h1>
         <p className="mt-4 leading-relaxed text-muted">
-          This address doesn&apos;t belong to anyone yet — or the couple hasn&apos;t made
+          This address doesn&apos;t belong to anyone yet, or the couple hasn&apos;t made
           their page public.
         </p>
         <Link

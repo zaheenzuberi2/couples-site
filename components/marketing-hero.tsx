@@ -113,8 +113,8 @@ export default function MarketingHero({
           className="mx-auto mt-7 max-w-xl leading-relaxed text-[#cbb8a3]"
         >
           Write a few lines, upload the photos you love, and your own page is
-          ready in minutes — your names, your story, your date. Share it with
-          everyone you&apos;re inviting, or keep it just between you.
+          ready in minutes with your names, your story and your date. Share it
+          with everyone you&apos;re inviting, or keep it just between you.
         </motion.p>
 
         <motion.div

@@ -77,7 +77,7 @@ export default function PaymentPanel({ site }: { site: Site }) {
     <>
       <p className="text-sm leading-relaxed">
         You picked the <span className="font-medium">{config.name}</span>{" "}
-        package — <span className="font-medium">{config.price}</span>, once.
+        package, <span className="font-medium">{config.price}</span>, once.
         That buys your public address and everything the {config.name} plan
         includes, for as long as you need it.
       </p>
@@ -103,7 +103,7 @@ export default function PaymentPanel({ site }: { site: Site }) {
                 ? `Sent ${formatDate(submittedAt)}. `
                 : ""}
               We&apos;ll switch your page on once we&apos;ve checked it against the
-              account — usually the same day.
+              account, usually the same day.
             </p>
             <label
               htmlFor="payment-proof-input"
@@ -135,7 +135,7 @@ export default function PaymentPanel({ site }: { site: Site }) {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               rows={2}
-              placeholder="Anything that helps us match it - reference number, sender name…"
+              placeholder="Anything that helps us match it: reference number, sender name…"
               className="mt-3 w-full resize-none border border-line bg-background px-3.5 py-2.5 text-sm outline-none focus:border-accent"
             />
             <label

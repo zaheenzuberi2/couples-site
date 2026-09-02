@@ -45,7 +45,7 @@ export default function PublishPanel({
             Package
           </dt>
           <dd className="mt-1">
-            {config.name} — {config.price}
+            {config.name}, {config.price}
           </dd>
         </div>
 
@@ -110,7 +110,7 @@ export default function PublishPanel({
             <span className="text-sm text-muted">
               {site.is_published
                 ? "Anyone with the address can see it."
-                : "Paid and ready — publish whenever you like."}
+                : "Paid and ready. Publish whenever you like."}
             </span>
           </form>
         )}

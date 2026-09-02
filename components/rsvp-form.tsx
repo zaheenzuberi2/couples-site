@@ -64,7 +64,7 @@ export default function RsvpForm({ siteId }: { siteId: string }) {
         <p className="mt-3 text-sm" style={{ color: "var(--whisper)" }}>
           {status.attending
             ? "We can't wait to celebrate with you."
-            : "We'll miss you — thank you for letting us know."}
+            : "We'll miss you. Thank you for letting us know."}
         </p>
       </div>
     );

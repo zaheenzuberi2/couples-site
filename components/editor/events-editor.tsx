@@ -17,7 +17,7 @@ export default function EventsEditor({
   return (
     <Section
       title="The celebrations"
-      hint="Mehndi, barat, walima, reception — add one card per event."
+      hint="Mehndi, barat, walima, reception. Add one card per event."
     >
       {events.length === 0 && (
         <p className="mb-6 border border-dashed border-line px-5 py-8 text-center text-sm text-muted">
@@ -125,7 +125,7 @@ export default function EventsEditor({
         <input type="hidden" name="site_id" value={siteId} />
         <input
           name="title"
-          placeholder="Add an event — e.g. Walima"
+          placeholder="Add an event (e.g. Walima)"
           className={`${inputClass} max-w-xs flex-1`}
         />
         <button type="submit" className={ghostButtonClass}>

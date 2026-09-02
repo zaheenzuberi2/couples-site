@@ -25,8 +25,8 @@ export default function CreateSiteForm() {
     <div className="mx-auto max-w-lg">
       <h1 className="font-display text-4xl">Let&apos;s make your page</h1>
       <p className="mt-3 leading-relaxed text-muted">
-        Two names and a web address is all we need to start. Everything else —
-        photos, your story, the schedule — comes next, and nothing is final.
+        Two names and a web address is all we need to start. Photos, your
+        story and the schedule come next, and nothing is final.
       </p>
 
       <form action={formAction} className="mt-10 space-y-6">
@@ -49,7 +49,7 @@ export default function CreateSiteForm() {
               selected={mode === "keepsake"}
               onClick={() => setMode("keepsake")}
               title="Keepsake"
-              body="Your story, your photos — a gift page, no guest list."
+              body="Your story and your photos, laid out as a gift page. No guest list."
             />
           </div>
         </fieldset>
@@ -71,7 +71,7 @@ export default function CreateSiteForm() {
             ))}
           </div>
           <p className="mt-3 text-xs text-muted">
-            You can start on any package — we&apos;ll confirm it when you message
+            You can start on any package. We&apos;ll confirm it when you message
             us to go live.
           </p>
         </fieldset>

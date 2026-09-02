@@ -50,7 +50,7 @@ export const TIERS: Record<Tier, TierConfig> = {
     features: [
       "Everything in Basic",
       "Unlimited photos",
-      "Event schedule — mehndi, barat, walima",
+      "Event schedule for mehndi, barat, walima",
       "RSVPs collected for you",
     ],
   },
@@ -66,7 +66,7 @@ export const TIERS: Record<Tier, TierConfig> = {
     features: [
       "Everything in Standard",
       "Every colour theme unlocked",
-      "Priority activation — live the same day",
+      "Priority activation, live the same day",
     ],
   },
 };

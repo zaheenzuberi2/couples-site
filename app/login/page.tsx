@@ -36,7 +36,7 @@ export default async function LoginPage({
 
         <h1 className="mt-8 font-display text-4xl">Sign in</h1>
         <p className="mt-3 text-sm leading-relaxed text-muted">
-          Enter your email and we&apos;ll send you a link. No password to remember —
+          Enter your email and we&apos;ll send you a link. No password to remember,
           you have enough to plan already.
         </p>
 

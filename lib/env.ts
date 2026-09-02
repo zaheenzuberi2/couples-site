@@ -94,4 +94,4 @@ export const BANK_ACCOUNT_NUMBER =
 export const BANK_IBAN =
   process.env.NEXT_PUBLIC_BANK_IBAN ?? "PK15MEZN0000300114712815";
 export const BANK_NAME =
-  process.env.NEXT_PUBLIC_BANK_NAME ?? "Meezan Bank — Digital Centre";
+  process.env.NEXT_PUBLIC_BANK_NAME ?? "Meezan Bank, Digital Centre";
