@@ -67,3 +67,33 @@ export async function setTier(formData: FormData): Promise<void> {
   revalidatePath("/admin");
   revalidatePath("/dashboard");
 }
+
+/**
+ * Permanently removes a site: the row (which cascades to its events,
+ * photos, timeline and rsvps via foreign keys) plus every file it owns in
+ * both storage buckets, since those aren't linked by a foreign key and
+ * would otherwise sit there orphaned forever. Irreversible - the confirm
+ * dialog on the button is the only safety net, there's no undo here.
+ */
+export async function deleteSite(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const siteId = String(formData.get("site_id") ?? "");
+  if (!siteId) return;
+
+  const db = createAdminClient();
+
+  for (const bucket of ["couple-photos", "payment-proofs"] as const) {
+    const { data: files } = await db.storage.from(bucket).list(siteId);
+    if (files && files.length > 0) {
+      await db.storage
+        .from(bucket)
+        .remove(files.map((f) => `${siteId}/${f.name}`));
+    }
+  }
+
+  await db.from("sites").delete().eq("id", siteId);
+
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { setPaid, setTier } from "./actions";
+import DeleteSiteButton from "@/components/admin/delete-site-button";
 import { formatDate } from "@/lib/format";
 import { isAdminEmail, isSupabaseConfigured, siteUrl } from "@/lib/env";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -72,6 +73,7 @@ export default async function AdminPage() {
                 <Th>Status</Th>
                 <Th>Payment proof</Th>
                 <Th>Links</Th>
+                <Th> </Th>
                 <Th> </Th>
               </tr>
             </thead>
@@ -175,6 +177,12 @@ export default async function AdminPage() {
                         {site.is_paid ? "Mark unpaid" : "Mark paid"}
                       </button>
                     </form>
+                  </Td>
+                  <Td>
+                    <DeleteSiteButton
+                      siteId={site.id}
+                      coupleName={`${site.partner_one} & ${site.partner_two}`}
+                    />
                   </Td>
                 </tr>
               ))}
