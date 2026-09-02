@@ -42,6 +42,12 @@ create table if not exists public.sites (
   rsvp_enabled   boolean not null default true,
   rsvp_deadline  date,
 
+  -- manual payment proof - see the payment-proofs bucket below.
+  -- The admin reviews this before flipping is_paid.
+  payment_screenshot   text,
+  payment_note         text not null default '',
+  payment_submitted_at timestamptz,
+
   created_at     timestamptz not null default now(),
   updated_at     timestamptz not null default now()
 );
@@ -277,5 +283,33 @@ create policy "owner deletes couple photos" on storage.objects
   for delete to authenticated
   using (
     bucket_id = 'couple-photos'
+    and public.owns_site(((storage.foldername(name))[1])::uuid)
+  );
+
+-- ------------------------------------------------------------
+-- 4. Storage bucket for payment proof screenshots
+-- ------------------------------------------------------------
+-- Private, unlike couple-photos - a bank transfer screenshot is financial
+-- evidence, not something to serve publicly. Admin reads it via a signed
+-- URL from the service-role client, which bypasses RLS entirely.
+
+insert into storage.buckets (id, name, public)
+values ('payment-proofs', 'payment-proofs', false)
+on conflict (id) do update set public = false;
+
+drop policy if exists "owner uploads payment proof"   on storage.objects;
+drop policy if exists "owner reads own payment proof" on storage.objects;
+
+create policy "owner uploads payment proof" on storage.objects
+  for insert to authenticated
+  with check (
+    bucket_id = 'payment-proofs'
+    and public.owns_site(((storage.foldername(name))[1])::uuid)
+  );
+
+create policy "owner reads own payment proof" on storage.objects
+  for select to authenticated
+  using (
+    bucket_id = 'payment-proofs'
     and public.owns_site(((storage.foldername(name))[1])::uuid)
   );

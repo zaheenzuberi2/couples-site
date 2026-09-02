@@ -24,6 +24,9 @@ export type Site = {
   venue_note: string;
   rsvp_enabled: boolean;
   rsvp_deadline: string | null;
+  payment_screenshot: string | null;
+  payment_note: string;
+  payment_submitted_at: string | null;
   created_at: string;
   updated_at: string;
 };

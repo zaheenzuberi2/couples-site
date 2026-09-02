@@ -1,4 +1,5 @@
 import { setPublished } from "@/app/dashboard/actions";
+import PaymentPanel from "@/components/editor/payment-panel";
 import { tierConfig } from "@/lib/tiers";
 import type { Site } from "@/lib/types";
 
@@ -87,18 +88,7 @@ export default function PublishPanel({
 
       <div className="mt-6 border-t border-line pt-5">
         {!site.is_paid ? (
-          <>
-            <p className="text-sm leading-relaxed">
-              You picked the{" "}
-              <span className="font-medium">{config.name}</span> package —{" "}
-              <span className="font-medium">{config.price}</span>, once. That
-              buys your public address and everything the {config.name} plan
-              includes, for as long as you need it.
-            </p>
-            <p className="mt-3 text-sm text-muted">
-              Send us a message to pay — we&apos;ll switch your page on the same day.
-            </p>
-          </>
+          <PaymentPanel site={site} />
         ) : (
           <form action={setPublished} className="flex flex-wrap items-center gap-4">
             <input type="hidden" name="site_id" value={site.id} />

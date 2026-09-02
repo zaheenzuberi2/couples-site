@@ -80,3 +80,18 @@ export const PRICE_PREMIUM =
 
 /** Product name, so rebranding is a one-line change. */
 export const BRAND = process.env.NEXT_PUBLIC_BRAND ?? "Ours";
+
+/**
+ * Bank details shown to a couple when they're ready to pay. Manual transfer
+ * is the only payment path today - see [[couples-website-builder]] memory
+ * for why (Stripe doesn't operate in Pakistan). Env-overridable so the
+ * account on file never needs a code change.
+ */
+export const BANK_ACCOUNT_NAME =
+  process.env.NEXT_PUBLIC_BANK_ACCOUNT_NAME ?? "Muhammad Zaheen Zubairi";
+export const BANK_ACCOUNT_NUMBER =
+  process.env.NEXT_PUBLIC_BANK_ACCOUNT_NUMBER ?? "00300114712815";
+export const BANK_IBAN =
+  process.env.NEXT_PUBLIC_BANK_IBAN ?? "PK15MEZN0000300114712815";
+export const BANK_NAME =
+  process.env.NEXT_PUBLIC_BANK_NAME ?? "Meezan Bank — Digital Centre";

@@ -34,6 +34,20 @@ export default async function AdminPage() {
   const sites = (data ?? []) as Site[];
   const paidCount = sites.filter((s) => s.is_paid).length;
 
+  // Payment screenshots live in a private bucket - a signed URL is the only
+  // way to view one, and it's generated fresh on every load of this page.
+  const proofUrls = new Map<string, string>();
+  await Promise.all(
+    sites
+      .filter((s) => s.payment_screenshot)
+      .map(async (s) => {
+        const { data: signed } = await db.storage
+          .from("payment-proofs")
+          .createSignedUrl(s.payment_screenshot as string, 60 * 60);
+        if (signed) proofUrls.set(s.id, signed.signedUrl);
+      })
+  );
+
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-12">
       <h1 className="font-display text-4xl">Admin</h1>
@@ -56,6 +70,7 @@ export default async function AdminPage() {
                 <Th>Package</Th>
                 <Th>Date</Th>
                 <Th>Status</Th>
+                <Th>Payment proof</Th>
                 <Th>Links</Th>
                 <Th> </Th>
               </tr>
@@ -104,6 +119,26 @@ export default async function AdminPage() {
                       )
                     ) : (
                       <span className="text-muted">Unpaid</span>
+                    )}
+                  </Td>
+                  <Td>
+                    {proofUrls.has(site.id) ? (
+                      <>
+                        <a
+                          href={proofUrls.get(site.id)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent underline underline-offset-4"
+                        >
+                          view screenshot
+                        </a>
+                        <span className="mt-0.5 block text-xs text-muted">
+                          {formatDate(site.payment_submitted_at)}
+                          {site.payment_note && ` · ${site.payment_note}`}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-muted">—</span>
                     )}
                   </Td>
                   <Td>

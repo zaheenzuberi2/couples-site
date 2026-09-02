@@ -324,6 +324,32 @@ export async function deletePhoto(formData: FormData): Promise<void> {
   refresh();
 }
 
+/* ----------------------------------------------------------- payment */
+
+/**
+ * Records that a screenshot was uploaded - the file itself already landed
+ * in the private payment-proofs bucket via the browser (see PaymentPanel),
+ * this just points the site row at it so it shows up in /admin.
+ */
+export async function submitPaymentProof(formData: FormData): Promise<void> {
+  const siteId = text(formData, "site_id");
+  const { supabase } = await requireOwnedSite(siteId);
+
+  const imagePath = text(formData, "image_path");
+  if (!imagePath) return;
+
+  await supabase
+    .from("sites")
+    .update({
+      payment_screenshot: imagePath,
+      payment_note: text(formData, "note"),
+      payment_submitted_at: new Date().toISOString(),
+    })
+    .eq("id", siteId);
+
+  refresh();
+}
+
 /* ------------------------------------------------------------ publish */
 
 export async function setPublished(formData: FormData): Promise<void> {
