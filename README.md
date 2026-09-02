@@ -1,36 +1,175 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ours — websites for couples
 
-## Getting Started
+Couples sign up, upload photos and write a few lines, and get their own page at
+`yoursite.com/sarah-and-ali`. Two modes from one template engine:
 
-First, run the development server:
+- **wedding** — invitation, event schedule (mehndi / barat / walima), RSVPs
+- **keepsake** — love story and photographs, no guest management
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Next.js 16 (App Router, Turbopack) · React 19 · Tailwind v4 · Supabase
+(Postgres + Auth + Storage) · deploys to Vercel.
+
+---
+
+## How the paywall works
+
+This is the one piece of business logic worth understanding before changing
+anything:
+
+| | private preview | public address |
+|---|---|---|
+| URL | `/preview/<unguessable-token>` | `/<slug>` |
+| Costs | free | paid |
+| Enforced by | service-role read, `noindex` | **Postgres RLS** |
+
+A couple builds their whole page for free and can share the preview link with
+anyone. The public `/slug` route only resolves when `is_paid AND is_published`.
+
+That gate lives in RLS (`anyone reads paid site`), not in application code, so
+guessing a slug is not enough — the row simply isn't returned. `setPublished`
+re-checks `is_paid` server-side too, because hiding a button is not security.
+
+**Payments are manual today.** `/admin` has a "Mark paid" switch you flip after
+a bank / JazzCash / Easypaisa transfer clears. A real gateway would call the
+same `setPaid` action from its webhook — nothing else needs to change.
+
+---
+
+## Current state
+
+**Supabase is provisioned and the schema is live.**
+
+| | |
+|---|---|
+| Project ref | `ohgbxpvvvsskmxwrgygq` |
+| URL | `https://ohgbxpvvvsskmxwrgygq.supabase.co` |
+| Org | `ours` (`qjarofbnysakfshvpbzv`) — deliberately separate from the client orgs |
+| Region | `ap-south-1` (Mumbai — nearest to Pakistan) |
+
+`.env.local` is already written and gitignored. The Postgres password is in
+`.db-password.local` (also gitignored); the app doesn't need it, it's only for
+direct `psql` access.
+
+Verified end to end against this project: unpaid slug 404s while the preview
+link 200s, marking paid takes it live, un-paying takes it straight back down,
+an anonymous guest can submit an RSVP to a live site but cannot read replies
+back and cannot submit to an unpaid one.
+
+**Not yet deployed to Vercel.**
+
+## Setup (for a fresh environment)
+
+### 1. Supabase
+
+Run [`supabase-setup.sql`](./supabase-setup.sql) in the SQL editor. It is
+idempotent — safe to re-run after edits. It creates:
+
+- 5 tables (`sites`, `site_events`, `site_photos`, `site_timeline`, `rsvps`)
+- RLS policies on all of them
+- the public `couple-photos` storage bucket and its write policies
+
+### 2. Environment
+
+`.env.local`:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://<ref>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon / publishable key>
+SUPABASE_SERVICE_ROLE_KEY=<service role key>
+ADMIN_EMAILS=mzaheen3307@gmail.com
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Optional: `NEXT_PUBLIC_BRAND`, `NEXT_PUBLIC_PRICE_LABEL`,
+`NEXT_PUBLIC_SITE_URL`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Everything else derives itself — `siteUrl()` falls back through
+`VERCEL_PROJECT_PRODUCTION_URL` → `VERCEL_URL` → localhost, so preview
+deployments send working magic links without extra config.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`SUPABASE_SERVICE_ROLE_KEY` is only needed for `/admin` and `/preview/...`.
+Without it the rest of the app still works.
 
-## Learn More
+### 3. Supabase Auth settings
 
-To learn more about Next.js, take a look at the following resources:
+Sign-in is a magic link, so the redirect URL must be allow-listed in
+**Authentication → URL Configuration**. Currently set to localhost only:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Site URL: `http://localhost:3010`
+- Redirect URLs: `http://localhost:3010/**`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Add the production origin here when you deploy**, or magic links from the
+live site will bounce.
 
-## Deploy on Vercel
+> Supabase's built-in SMTP is rate-limited (a handful of emails per hour) and is
+> meant for testing. Before real couples sign up, connect a custom SMTP provider
+> — otherwise sign-in silently starts failing under load.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 4. Run it
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run dev -- -p 3010
+```
+
+---
+
+## Architecture notes
+
+**`proxy.ts`, not `middleware.ts`.** Next 16 renamed the convention. The
+Supabase docs still show `middleware.ts`, which does nothing here. Its only job
+is refreshing the auth cookie; access control is in RLS and in the pages.
+
+**`params` is a Promise.** Next 16 — `const { slug } = await params`.
+`PageProps<"/[slug]">` and `LayoutProps<"/">` are globals generated by typegen,
+so `tsc --noEmit` fails on a clean checkout until `next build` has run once.
+
+**Font variables are named after the typeface** (`--font-cormorant`), not the
+role (`--font-display`). The `@theme` block maps role → typeface; naming both
+ends the same is a circular reference and silently drops the font.
+
+**Ownership is checked twice.** RLS is the real boundary, but every server
+action also filters `owner_id`, so one bad policy can't become a cross-account
+write. Admin actions re-check `isAdminEmail` inside the action — Server Actions
+are reachable by anyone who can guess the id.
+
+**Photo uploads go browser → Supabase Storage directly**, never through a
+serverless function, so large photos don't hit request body limits. The storage
+RLS policy keys off the `<site_id>/` path prefix.
+
+**Slugs share a namespace with app routes.** `lib/slug.ts` keeps a reserved
+list; add to it before adding any new top-level route.
+
+**Slug locking.** A couple can change their address until they pay. After that
+it's locked, because invitations may already carry the link.
+
+---
+
+## Layout
+
+```
+app/
+  page.tsx              marketing landing page
+  [slug]/               the couple's public page (RLS-gated)
+  preview/[token]/      private preview, works before payment
+  login/                magic-link sign in
+  auth/callback/        code -> session exchange
+  dashboard/            the builder
+    actions.ts          all site-editing server actions
+  admin/                mark paid / unpaid
+components/
+  couple-page.tsx       the template engine (both modes)
+  rsvp-form.tsx         guest-facing RSVP
+  editor/               the dashboard UI
+lib/
+  env.ts                config, all self-deriving
+  data.ts               server-only reads
+  slug.ts               slug rules + reserved names
+  supabase/             server / client / admin clients
+supabase-setup.sql      schema, RLS, storage — idempotent
+```
+
+## Not built yet
+
+- Payment gateway integration (manual switch today)
+- Custom domains per couple
+- Guest list / invitation tracking beyond RSVPs
+- Email notification to the couple when an RSVP arrives

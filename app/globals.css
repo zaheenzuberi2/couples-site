@@ -1,26 +1,131 @@
 @import "tailwindcss";
 
+/* ============================================================
+   App chrome (marketing, dashboard, editor, admin)
+   Warm neutral - deliberately quiet, so the couple's own page
+   is the only thing on this platform that shouts.
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fbf9f7;
+  --foreground: #1c1917;
+  --muted: #78716c;
+  --line: #e7e1db;
+  --card: #ffffff;
+  --accent: #9c3f5b;
+  --accent-soft: #f6e7ec;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-jost);
+  --font-display: var(--font-cormorant);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ============================================================
+   Couple page themes
+   Scoped to [data-theme] so a couple's palette never leaks into
+   the surrounding app chrome (matters on the preview screen,
+   where both are on the page at once).
+   ============================================================ */
+
+[data-theme] {
+  --ink: #24201e;
+  --paper: #fffdfb;
+  --paper-alt: #f7f1ec;
+  --rule: #e3d8d0;
+  --gilt: #9c3f5b;
+  --whisper: #8a7d76;
+
+  color: var(--ink);
+  background: var(--paper);
+}
+
+[data-theme="blush"] {
+  --ink: #3b2430;
+  --paper: #fffaf8;
+  --paper-alt: #fbeef0;
+  --rule: #f0d9de;
+  --gilt: #b5647c;
+  --whisper: #9c8189;
+}
+
+[data-theme="midnight"] {
+  --ink: #f2ece4;
+  --paper: #14161f;
+  --paper-alt: #1c1f2b;
+  --rule: #2e3244;
+  --gilt: #c9a86a;
+  --whisper: #9aa0b4;
+}
+
+[data-theme="sage"] {
+  --ink: #22302a;
+  --paper: #fbfdfa;
+  --paper-alt: #eaf1ea;
+  --rule: #d3e0d5;
+  --gilt: #5f7d63;
+  --whisper: #7b8a80;
+}
+
+[data-theme="gold"] {
+  --ink: #2b2419;
+  --paper: #fdfaf3;
+  --paper-alt: #f6eeda;
+  --rule: #e6d8b8;
+  --gilt: #a3813a;
+  --whisper: #8b7c60;
+}
+
+/* Type scale for couple pages: display serif, generous tracking. */
+.display {
+  font-family: var(--font-cormorant), ui-serif, Georgia, serif;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--whisper);
+}
+
+/* Hairline divider with a centred diamond - a wedding-stationery cue. */
+.rule-diamond {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--rule);
+}
+.rule-diamond::before,
+.rule-diamond::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
