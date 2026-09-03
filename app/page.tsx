@@ -26,7 +26,8 @@ export default function Home() {
           />
           <Mode
             title="A keepsake"
-            body="No guest list, no schedule. Just how you met, where you've been, and the photographs, laid out like something worth reading twice. An anniversary gift that isn't flowers."
+            tag="The ultimate digital gift"
+            body="Better than flowers that die or chocolates that get eaten. No guest list, no schedule, just how you met, where you've been, and the photographs, laid out like something worth reading twice. Perfect for hard launching your relationship, an anniversary, or just because."
           />
         </div>
       </section>
@@ -175,10 +176,23 @@ function GameCard({ title, body }: { title: string; body: string }) {
   );
 }
 
-function Mode({ title, body }: { title: string; body: string }) {
+function Mode({
+  title,
+  tag,
+  body,
+}: {
+  title: string;
+  tag?: string;
+  body: string;
+}) {
   return (
     <div className="bg-card p-10">
-      <h2 className="font-display text-3xl">{title}</h2>
+      {tag && (
+        <p className="text-xs tracking-[0.24em] text-accent uppercase">
+          {tag}
+        </p>
+      )}
+      <h2 className={`font-display text-3xl ${tag ? "mt-2" : ""}`}>{title}</h2>
       <p className="mt-4 leading-relaxed text-muted">{body}</p>
     </div>
   );
