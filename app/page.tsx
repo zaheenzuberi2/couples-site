@@ -1,7 +1,19 @@
-import type { Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing-hero";
-import { BRAND, PRICE_LABEL } from "@/lib/env";
+import { BRAND, PRICE_LABEL, siteUrl } from "@/lib/env";
+
+// The homepage is the one page whose title shouldn't inherit the root
+// layout's template ("%s · Ours") - it IS the brand, so it gets its own
+// full title plus the keyword phrases people actually search for. The
+// catchy hero headline stays catchy (it's for humans); this is what
+// search engines read instead.
+export const metadata: Metadata = {
+  title: `${BRAND} - Build a Free Website for Couples`,
+  description:
+    "Make a beautiful website for the two of you in minutes. Add your photos, your story and your dates - a couple website builder for anniversaries, relationship reveals, and keepsake pages. Free to build.",
+  alternates: { canonical: siteUrl() },
+};
 
 // The page opens on a dark hero - the browser's own chrome should match it
 // rather than flash the light default from the root layout.
@@ -12,8 +24,48 @@ export const viewport: Viewport = {
 };
 
 export default function Home() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${siteUrl()}/#organization`,
+        name: BRAND,
+        url: siteUrl(),
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${siteUrl()}/#website`,
+        name: BRAND,
+        url: siteUrl(),
+        description:
+          "A website builder for couples - photos, your story, and your dates, turned into a page you can share.",
+        publisher: { "@id": `${siteUrl()}/#organization` },
+      },
+      {
+        "@type": "Product",
+        name: `${BRAND} couple website`,
+        description:
+          "A custom website for the two of you: your photos, your story and your dates on your own web address.",
+        brand: { "@id": `${siteUrl()}/#organization` },
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "PKR",
+          price: PRICE_LABEL.replace(/[^0-9.]/g, ""),
+          availability: "https://schema.org/InStock",
+          url: siteUrl(),
+        },
+      },
+    ],
+  };
+
   return (
     <div className="flex flex-1 flex-col">
+      {/* Structured data for search engines - no visible effect. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <MarketingHero price={PRICE_LABEL} />
 
       {/* --------------------------------------------------------- pitch */}

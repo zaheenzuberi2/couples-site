@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import CouplePage from "@/components/couple-page";
 import { getPublicSite } from "@/lib/data";
 import { THEME_PAPER_COLOR } from "@/lib/theme-colors";
+import { siteUrl } from "@/lib/env";
 
 /**
  * The couple's public page, at the root of the domain: /sarah-and-ali
@@ -27,6 +28,7 @@ export async function generateMetadata({
   return {
     title: names,
     description: site.tagline || site.story.slice(0, 160) || names,
+    alternates: { canonical: `${siteUrl()}/${slug}` },
     // No manual openGraph.images/twitter.images here on purpose - the
     // opengraph-image.tsx file in this same segment generates a themed
     // card automatically, and Twitter falls back to og:image on its own

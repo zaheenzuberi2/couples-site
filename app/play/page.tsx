@@ -2,9 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import CreateRoomForm from "@/components/play/create-room-form";
 import { PLAY_COLORS } from "@/components/play/ui";
+import { siteUrl } from "@/lib/env";
 
 export const metadata: Metadata = {
-  title: "Free bucket list & quiz",
+  title: "Free Couple Bucket List & “How Well Do You Know Us” Quiz Maker",
+  description:
+    "Make a shared bucket list or a how-well-do-you-know-us quiz for you and your partner. No sign-up, no account - just a title and a link to share.",
+  alternates: { canonical: `${siteUrl()}/play` },
 };
 
 export default function PlayLandingPage() {

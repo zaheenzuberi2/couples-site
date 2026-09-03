@@ -6,7 +6,12 @@ import LoginForm from "@/components/login-form";
 import { BRAND, isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Sign in" };
+// A sign-in screen has no unique content to rank, and indexing it just
+// gives search engines a low-value page to crawl instead of the real ones.
+export const metadata: Metadata = {
+  title: "Sign in",
+  robots: { index: false, follow: false },
+};
 
 export default async function LoginPage({
   searchParams,

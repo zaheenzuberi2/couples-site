@@ -1,8 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import { photoUrl } from "@/lib/data";
 import { formatDate, formatMonthYear } from "@/lib/format";
 import type { SiteBundle } from "@/lib/types";
 import Hero from "@/components/hero";
+import { BRAND } from "@/lib/env";
 
 /**
  * The couple's page: a keepsake love-story page. Every section is skipped
@@ -184,6 +186,12 @@ function Footer({ site }: { site: SiteBundle["site"] }) {
       {site.event_date && (
         <p className="eyebrow mt-3">{formatDate(site.event_date)}</p>
       )}
+      <p className="mt-8 text-xs" style={{ color: "var(--whisper)" }}>
+        Made with{" "}
+        <Link href="/" className="underline underline-offset-4">
+          {BRAND}
+        </Link>
+      </p>
     </footer>
   );
 }
