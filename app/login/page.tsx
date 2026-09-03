@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { BrandMark } from "@/components/brand-mark";
 import LoginForm from "@/components/login-form";
 import { BRAND, isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
@@ -30,7 +31,8 @@ export default async function LoginPage({
   return (
     <main className="flex flex-1 items-center justify-center px-6 py-20">
       <div className="w-full max-w-sm">
-        <Link href="/" className="font-display text-3xl">
+        <Link href="/" className="flex items-center gap-2.5 font-display text-3xl">
+          <BrandMark size={26} color="var(--accent)" />
           {BRAND}
         </Link>
 

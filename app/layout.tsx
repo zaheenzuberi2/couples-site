@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
-import { BRAND } from "@/lib/env";
+import { BRAND, siteUrl } from "@/lib/env";
 import "./globals.css";
 
 // Font variables are named after the typeface, not the role. The @theme block
@@ -19,6 +19,10 @@ const body = Jost({
 });
 
 export const metadata: Metadata = {
+  // Lets Next resolve the opengraph-image / twitter-image routes (and any
+  // other relative metadata URL) to a real absolute URL instead of the
+  // localhost fallback it uses when this is unset.
+  metadataBase: new URL(siteUrl()),
   title: {
     default: `${BRAND}, a website for the two of you`,
     template: `%s · ${BRAND}`,

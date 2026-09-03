@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import CouplePage from "@/components/couple-page";
-import { getPublicSite, photoUrl } from "@/lib/data";
+import { getPublicSite } from "@/lib/data";
 import { formatDate } from "@/lib/format";
 import { allowedTheme } from "@/lib/tiers";
 import { THEME_PAPER_COLOR } from "@/lib/theme-colors";
@@ -30,22 +30,22 @@ export async function generateMetadata({
       ? `${names}, ${formatDate(site.event_date)}`
       : names;
 
-  const image = photoUrl(site.hero_photo ?? bundle.photos[0]?.image_path);
-
   return {
     title,
     description: site.tagline || site.story.slice(0, 160) || names,
+    // No manual openGraph.images/twitter.images here on purpose - the
+    // opengraph-image.tsx file in this same segment generates a themed
+    // card automatically, and Twitter falls back to og:image on its own
+    // when twitter:image is absent.
     openGraph: {
       title,
       description: site.tagline || names,
       type: "website",
-      images: image ? [{ url: image }] : undefined,
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title,
       description: site.tagline || names,
-      images: image ? [image] : undefined,
     },
   };
 }

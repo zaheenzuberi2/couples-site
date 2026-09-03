@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
+import { BrandMark } from "@/components/brand-mark";
 import { BRAND } from "@/lib/env";
 
 /**
@@ -84,7 +85,8 @@ export default function MarketingHero({
         </div>
       )}
 
-      <header className="pt-safe relative z-10 mx-auto flex w-full max-w-5xl items-center px-6 py-6">
+      <header className="pt-safe relative z-10 mx-auto flex w-full max-w-5xl items-center gap-2.5 px-6 py-6">
+        <BrandMark size={22} color="#e8c98a" />
         <span className="font-display text-2xl text-[#f5ece0]">{BRAND}</span>
         <Link
           href="/login"

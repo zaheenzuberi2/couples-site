@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { BrandMark } from "@/components/brand-mark";
 import BucketListEditor from "@/components/editor/bucket-list-editor";
 import CreateSiteForm from "@/components/editor/create-site-form";
 import DetailsForm from "@/components/editor/details-form";
@@ -45,7 +46,8 @@ export default async function DashboardPage({
     <div className="flex flex-1 flex-col">
       <header className="border-b border-line">
         <div className="mx-auto flex max-w-4xl items-center gap-4 px-6 py-4">
-          <Link href="/" className="font-display text-2xl">
+          <Link href="/" className="flex items-center gap-2 font-display text-2xl">
+            <BrandMark size={20} color="var(--accent)" />
             {BRAND}
           </Link>
           <span className="ml-auto hidden text-sm text-muted sm:inline">
