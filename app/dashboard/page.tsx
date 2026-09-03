@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import BucketListEditor from "@/components/editor/bucket-list-editor";
 import CreateSiteForm from "@/components/editor/create-site-form";
 import DetailsForm from "@/components/editor/details-form";
 import EventsEditor from "@/components/editor/events-editor";
 import PhotoManager from "@/components/editor/photo-manager";
+import QuizEditor from "@/components/editor/quiz-editor";
 import PublishPanel from "@/components/editor/publish-panel";
 import RsvpList from "@/components/editor/rsvp-list";
 import TimelineEditor from "@/components/editor/timeline-editor";
@@ -99,6 +101,10 @@ export default async function DashboardPage({
               entries={bundle.timeline}
               mode={bundle.site.mode}
             />
+
+            <BucketListEditor siteId={bundle.site.id} items={bundle.bucketList} />
+
+            <QuizEditor siteId={bundle.site.id} questions={bundle.quizQuestions} />
 
             <PhotoManager
               siteId={bundle.site.id}

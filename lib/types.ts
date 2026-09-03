@@ -72,10 +72,42 @@ export type Rsvp = {
   created_at: string;
 };
 
+/** Free on every plan - no tier check anywhere near this one. */
+export type BucketItem = {
+  id: string;
+  site_id: string;
+  item: string;
+  done: boolean;
+  sort_order: number;
+  created_at: string;
+};
+
+/** Free on every plan. `options` is 2-4 strings; correct_index picks one. */
+export type QuizQuestion = {
+  id: string;
+  site_id: string;
+  question: string;
+  options: string[];
+  correct_index: number;
+  sort_order: number;
+};
+
+/** One guest's finished attempt - a leaderboard row, not a submission form. */
+export type QuizAttempt = {
+  id: string;
+  site_id: string;
+  guest_name: string;
+  score: number;
+  total: number;
+  created_at: string;
+};
+
 /** Everything a public page needs, fetched in one go. */
 export type SiteBundle = {
   site: Site;
   events: SiteEvent[];
   photos: SitePhoto[];
   timeline: TimelineEntry[];
+  bucketList: BucketItem[];
+  quizQuestions: QuizQuestion[];
 };

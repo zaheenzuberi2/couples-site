@@ -103,6 +103,41 @@ create table if not exists public.rsvps (
 );
 create index if not exists rsvps_site_idx on public.rsvps(site_id, created_at desc);
 
+-- Bucket list: free for every couple, no tier gate.
+create table if not exists public.site_bucket_list (
+  id          uuid primary key default gen_random_uuid(),
+  site_id     uuid not null references public.sites(id) on delete cascade,
+  item        text not null default '',
+  done        boolean not null default false,
+  sort_order  int  not null default 0,
+  created_at  timestamptz not null default now()
+);
+create index if not exists site_bucket_list_site_idx on public.site_bucket_list(site_id, sort_order);
+
+-- Quiz: questions the couple writes, guests answer for fun.
+-- Free for every couple, no tier gate.
+create table if not exists public.quiz_questions (
+  id             uuid primary key default gen_random_uuid(),
+  site_id        uuid not null references public.sites(id) on delete cascade,
+  question       text not null default '',
+  options        text[] not null default '{}',
+  correct_index  int  not null default 0,
+  sort_order     int  not null default 0
+);
+create index if not exists quiz_questions_site_idx on public.quiz_questions(site_id, sort_order);
+
+-- Leaderboard entries. Unlike RSVPs, these are meant to be publicly
+-- readable - the whole point is guests seeing who scored highest.
+create table if not exists public.quiz_attempts (
+  id          uuid primary key default gen_random_uuid(),
+  site_id     uuid not null references public.sites(id) on delete cascade,
+  guest_name  text not null,
+  score       int  not null check (score >= 0),
+  total       int  not null check (total > 0),
+  created_at  timestamptz not null default now()
+);
+create index if not exists quiz_attempts_site_idx on public.quiz_attempts(site_id, score desc, created_at asc);
+
 -- keep updated_at honest
 create or replace function public.touch_updated_at()
 returns trigger language plpgsql as $fn$
@@ -253,6 +288,44 @@ create policy "owner reads rsvps" on public.rsvps
   for select using (public.owns_site(site_id));
 
 create policy "owner deletes rsvps" on public.rsvps
+  for delete using (public.owns_site(site_id));
+
+-- --- site_bucket_list ------------------------------------------
+alter table public.site_bucket_list enable row level security;
+
+drop policy if exists "owner manages bucket list" on public.site_bucket_list;
+drop policy if exists "public reads bucket list"  on public.site_bucket_list;
+
+create policy "owner manages bucket list" on public.site_bucket_list
+  for all using (public.owns_site(site_id)) with check (public.owns_site(site_id));
+create policy "public reads bucket list" on public.site_bucket_list
+  for select using (public.site_is_public(site_id));
+
+-- --- quiz_questions ----------------------------------------------
+alter table public.quiz_questions enable row level security;
+
+drop policy if exists "owner manages quiz questions" on public.quiz_questions;
+drop policy if exists "public reads quiz questions"  on public.quiz_questions;
+
+create policy "owner manages quiz questions" on public.quiz_questions
+  for all using (public.owns_site(site_id)) with check (public.owns_site(site_id));
+create policy "public reads quiz questions" on public.quiz_questions
+  for select using (public.site_is_public(site_id));
+
+-- --- quiz_attempts -------------------------------------------------
+-- Unlike rsvps, these are meant to be publicly readable - the whole point
+-- is guests seeing who scored highest on the leaderboard.
+alter table public.quiz_attempts enable row level security;
+
+drop policy if exists "guest submits quiz attempt" on public.quiz_attempts;
+drop policy if exists "public reads quiz attempts" on public.quiz_attempts;
+drop policy if exists "owner deletes quiz attempts" on public.quiz_attempts;
+
+create policy "guest submits quiz attempt" on public.quiz_attempts
+  for insert with check (public.site_is_public(site_id));
+create policy "public reads quiz attempts" on public.quiz_attempts
+  for select using (public.site_is_public(site_id));
+create policy "owner deletes quiz attempts" on public.quiz_attempts
   for delete using (public.owns_site(site_id));
 
 -- ------------------------------------------------------------

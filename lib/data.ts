@@ -1,10 +1,13 @@
 import "server-only";
 
+import { cache } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import type {
+  BucketItem,
+  QuizQuestion,
   Rsvp,
   Site,
   SiteBundle,
@@ -23,28 +26,41 @@ async function loadChildren(
   db: AnyClient,
   siteId: string
 ): Promise<Omit<SiteBundle, "site">> {
-  const [events, photos, timeline] = await Promise.all([
-    db
-      .from("site_events")
-      .select("*")
-      .eq("site_id", siteId)
-      .order("sort_order", { ascending: true }),
-    db
-      .from("site_photos")
-      .select("*")
-      .eq("site_id", siteId)
-      .order("sort_order", { ascending: true }),
-    db
-      .from("site_timeline")
-      .select("*")
-      .eq("site_id", siteId)
-      .order("sort_order", { ascending: true }),
-  ]);
+  const [events, photos, timeline, bucketList, quizQuestions] =
+    await Promise.all([
+      db
+        .from("site_events")
+        .select("*")
+        .eq("site_id", siteId)
+        .order("sort_order", { ascending: true }),
+      db
+        .from("site_photos")
+        .select("*")
+        .eq("site_id", siteId)
+        .order("sort_order", { ascending: true }),
+      db
+        .from("site_timeline")
+        .select("*")
+        .eq("site_id", siteId)
+        .order("sort_order", { ascending: true }),
+      db
+        .from("site_bucket_list")
+        .select("*")
+        .eq("site_id", siteId)
+        .order("sort_order", { ascending: true }),
+      db
+        .from("quiz_questions")
+        .select("*")
+        .eq("site_id", siteId)
+        .order("sort_order", { ascending: true }),
+    ]);
 
   return {
     events: (events.data ?? []) as SiteEvent[],
     photos: (photos.data ?? []) as SitePhoto[],
     timeline: (timeline.data ?? []) as TimelineEntry[],
+    bucketList: (bucketList.data ?? []) as BucketItem[],
+    quizQuestions: (quizQuestions.data ?? []) as QuizQuestion[],
   };
 }
 
@@ -53,7 +69,9 @@ async function loadChildren(
  * "paid and published", so an unpaid site is invisible here even if someone
  * guesses the slug.
  */
-export async function getPublicSite(slug: string): Promise<SiteBundle | null> {
+export const getPublicSite = cache(async function getPublicSite(
+  slug: string
+): Promise<SiteBundle | null> {
   if (!isSupabaseConfigured) return null;
   const db = await createClient();
 
@@ -67,7 +85,7 @@ export async function getPublicSite(slug: string): Promise<SiteBundle | null> {
 
   const children = await loadChildren(db, site.id);
   return { site: site as Site, ...children };
-}
+});
 
 /**
  * Private preview lookup by unguessable token. Uses the service role because
@@ -76,7 +94,7 @@ export async function getPublicSite(slug: string): Promise<SiteBundle | null> {
  * The token is the credential, so it must match exactly - never fall back to
  * a partial match or a slug lookup here.
  */
-export async function getSiteByPreviewToken(
+export const getSiteByPreviewToken = cache(async function getSiteByPreviewToken(
   token: string
 ): Promise<SiteBundle | null> {
   if (!token || token.length < 8) return null;
@@ -94,7 +112,7 @@ export async function getSiteByPreviewToken(
 
   const children = await loadChildren(db, site.id);
   return { site: site as Site, ...children };
-}
+});
 
 /** The signed-in user's site, if they have one. */
 export async function getMySite(): Promise<SiteBundle | null> {
