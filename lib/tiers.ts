@@ -35,6 +35,7 @@ export const TIERS: Record<Tier, TierConfig> = {
     features: [
       "Your own web address",
       "Story, timeline and up to 10 photos",
+      "Bucket list and a \"how well do you know us\" quiz",
       "Works on every phone",
     ],
   },

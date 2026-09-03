@@ -31,6 +31,29 @@ export default function Home() {
         </div>
       </section>
 
+      {/* --------------------------------------------------------- games */}
+      <section className="mx-auto w-full max-w-5xl px-6 py-24">
+        <div className="text-center">
+          <p className="text-xs tracking-[0.28em] text-muted uppercase">
+            Free on every package
+          </p>
+          <h2 className="mt-3 font-display text-4xl">
+            A little more than a page
+          </h2>
+        </div>
+
+        <div className="mt-14 grid gap-6 sm:grid-cols-2">
+          <GameCard
+            title="How well do you know us?"
+            body="Write a few questions, guests answer for fun, and a live leaderboard shows who knows you best."
+          />
+          <GameCard
+            title="Our bucket list"
+            body="Things you want to do together. Guests see your progress, not a due date."
+          />
+        </div>
+      </section>
+
       {/* ----------------------------------------------------------- how */}
       <section id="how" className="mx-auto w-full max-w-4xl px-6 py-24">
         <h2 className="text-center font-display text-4xl">
@@ -139,6 +162,15 @@ function PricingCard({
       >
         Start with {config.name}
       </Link>
+    </div>
+  );
+}
+
+function GameCard({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="border border-line bg-card p-8">
+      <h3 className="font-display text-2xl">{title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-muted">{body}</p>
     </div>
   );
 }
