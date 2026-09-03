@@ -13,7 +13,7 @@ type Stage = "name" | "quiz" | "result";
  * data already, so there's nothing meaningful to hide server-side); the
  * only write is the finished score landing in quiz_attempts for the
  * leaderboard. RLS is what actually enforces this can only happen on a
- * live site, same pattern as RsvpForm.
+ * live site.
  */
 export default function QuizWidget({
   siteId,

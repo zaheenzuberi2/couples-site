@@ -1,87 +1,35 @@
 import Image from "next/image";
 import { photoUrl } from "@/lib/data";
-import {
-  daysUntil,
-  formatDate,
-  formatDateTime,
-  formatMonthYear,
-} from "@/lib/format";
-import { allowedTheme, tierConfig } from "@/lib/tiers";
+import { formatDate, formatMonthYear } from "@/lib/format";
 import type { SiteBundle } from "@/lib/types";
 import Hero from "@/components/hero";
-import RsvpForm from "@/components/rsvp-form";
 import QuizWidget from "@/components/quiz-widget";
 
 /**
- * The couple's page. One component renders both modes:
- *   wedding  - invitation, event schedule, RSVP
- *   keepsake - love story, no guest management
- *
- * Every section is skipped when its content is empty, so a half-finished
- * page still looks deliberate rather than broken.
- *
- * Tier limits are re-checked here, not just trusted from the stored flags -
- * if a site is ever downgraded after the fact, the public page should never
- * show a feature the current plan doesn't include.
+ * The couple's page: a keepsake love-story page. Every section is skipped
+ * when its content is empty, so a half-finished page still looks
+ * deliberate rather than broken.
  */
 export default function CouplePage({ bundle }: { bundle: SiteBundle }) {
-  const { site, events, photos, timeline, bucketList, quizQuestions } = bundle;
-  const isWedding = site.mode === "wedding";
-  const config = tierConfig(site.tier);
-  const theme = allowedTheme(site.tier, site.theme);
+  const { site, photos, timeline, bucketList, quizQuestions } = bundle;
 
   const heroSrc = photoUrl(site.hero_photo) ?? photoUrl(photos[0]?.image_path);
-  const galleryPhotos = (site.hero_photo ? photos : photos.slice(1)).slice(
-    0,
-    config.maxPhotos
-  ); // first photo was promoted to the hero
-
-  const countdown = isWedding ? daysUntil(site.event_date) : null;
-  const showEvents = isWedding && config.events && events.length > 0;
-  const showRsvp = isWedding && config.rsvp && site.rsvp_enabled;
+  const galleryPhotos = site.hero_photo ? photos : photos.slice(1); // first photo was promoted to the hero
 
   return (
-    <div data-theme={theme} className="min-h-screen">
-      <Hero
-        site={site}
-        heroSrc={heroSrc}
-        countdown={countdown}
-        showRsvp={showRsvp}
-      />
+    <div data-theme={site.theme} className="min-h-screen">
+      <Hero site={site} heroSrc={heroSrc} />
 
-      {site.story.trim() && <Story site={site} isWedding={isWedding} />}
+      {site.story.trim() && <Story site={site} />}
 
       {timeline.length > 0 && <Timeline entries={timeline} />}
 
       {bucketList.length > 0 && <BucketList items={bucketList} />}
 
-      {showEvents && <Events events={events} venueNote={site.venue_note} />}
-
       {galleryPhotos.length > 0 && <Gallery photos={galleryPhotos} />}
 
       {quizQuestions.length > 0 && (
         <QuizWidget siteId={site.id} questions={quizQuestions} />
-      )}
-
-      {showRsvp && (
-        <section
-          id="rsvp"
-          className="px-6 py-24 sm:py-32"
-          style={{ background: "var(--paper-alt)" }}
-        >
-          <div className="mx-auto max-w-xl">
-            <SectionHeading
-              eyebrow="Will you join us"
-              title="RSVP"
-              subtitle={
-                site.rsvp_deadline
-                  ? `Kindly reply by ${formatDate(site.rsvp_deadline)}`
-                  : undefined
-              }
-            />
-            <RsvpForm siteId={site.id} />
-          </div>
-        </section>
       )}
 
       <Footer site={site} />
@@ -91,20 +39,11 @@ export default function CouplePage({ bundle }: { bundle: SiteBundle }) {
 
 /* --------------------------------------------------------------- story */
 
-function Story({
-  site,
-  isWedding,
-}: {
-  site: SiteBundle["site"];
-  isWedding: boolean;
-}) {
+function Story({ site }: { site: SiteBundle["site"] }) {
   return (
     <section className="px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-2xl text-center">
-        <SectionHeading
-          eyebrow={isWedding ? "Our story" : "A letter"}
-          title={isWedding ? "How we got here" : "For you"}
-        />
+        <SectionHeading eyebrow="A letter" title="For you" />
         <div className="mt-10 space-y-6 text-left">
           {site.story
             .split(/\n+/)
@@ -242,85 +181,6 @@ function BucketList({ items }: { items: SiteBundle["bucketList"] }) {
   );
 }
 
-/* -------------------------------------------------------------- events */
-
-function Events({
-  events,
-  venueNote,
-}: {
-  events: SiteBundle["events"];
-  venueNote: string;
-}) {
-  return (
-    <section className="px-6 py-24 sm:py-32">
-      <div className="mx-auto max-w-5xl">
-        <SectionHeading eyebrow="Join us" title="The celebrations" centered />
-
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {events.map((event) => (
-            <article
-              key={event.id}
-              className="flex flex-col border p-8 text-center"
-              style={{ borderColor: "var(--rule)" }}
-            >
-              <h3 className="display text-3xl">{event.title}</h3>
-
-              {event.starts_at && (
-                <p className="eyebrow mt-4">{formatDateTime(event.starts_at)}</p>
-              )}
-
-              <div className="rule-diamond my-6">
-                <Diamond />
-              </div>
-
-              {event.venue && (
-                <p className="font-medium">{event.venue}</p>
-              )}
-              {event.address && (
-                <p
-                  className="mt-1 text-sm leading-relaxed"
-                  style={{ color: "var(--whisper)" }}
-                >
-                  {event.address}
-                </p>
-              )}
-              {event.dress_code && (
-                <p
-                  className="mt-4 text-sm italic"
-                  style={{ color: "var(--whisper)" }}
-                >
-                  {event.dress_code}
-                </p>
-              )}
-
-              {event.map_url && (
-                <a
-                  href={event.map_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 inline-block self-center border-b pb-0.5 text-xs tracking-[0.18em] uppercase"
-                  style={{ color: "var(--gilt)", borderColor: "var(--gilt)" }}
-                >
-                  View map
-                </a>
-              )}
-            </article>
-          ))}
-        </div>
-
-        {venueNote.trim() && (
-          <p
-            className="mx-auto mt-12 max-w-xl text-center text-sm leading-relaxed"
-            style={{ color: "var(--whisper)" }}
-          >
-            {venueNote}
-          </p>
-        )}
-      </div>
-    </section>
-  );
-}
-
 /* ------------------------------------------------------------- gallery */
 
 function Gallery({ photos }: { photos: SiteBundle["photos"] }) {
@@ -387,16 +247,6 @@ function SectionHeading({
         </p>
       )}
     </div>
-  );
-}
-
-function Diamond() {
-  return (
-    <span
-      aria-hidden
-      className="h-1.5 w-1.5 shrink-0 rotate-45"
-      style={{ background: "var(--gilt)" }}
-    />
   );
 }
 

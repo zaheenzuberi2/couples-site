@@ -1,8 +1,6 @@
 import { ImageResponse } from "next/og";
 import { notFound } from "next/navigation";
 import { getPublicSite } from "@/lib/data";
-import { formatDate } from "@/lib/format";
-import { allowedTheme } from "@/lib/tiers";
 import { THEME_COLORS } from "@/lib/theme-colors";
 
 export const size = { width: 1200, height: 630 };
@@ -24,13 +22,9 @@ export default async function Image({ params }: PageProps<"/[slug]">) {
 
   const { site } = bundle;
   const names = [site.partner_one, site.partner_two].filter(Boolean).join(" & ");
-  const subtitle =
-    site.mode === "wedding" && site.event_date
-      ? formatDate(site.event_date)
-      : site.tagline;
+  const subtitle = site.tagline;
 
-  const theme = allowedTheme(site.tier, site.theme);
-  const colors = THEME_COLORS[theme];
+  const colors = THEME_COLORS[site.theme];
 
   return new ImageResponse(
     (

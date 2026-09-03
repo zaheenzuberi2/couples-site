@@ -8,10 +8,8 @@ import { isSupabaseConfigured } from "@/lib/env";
 import type {
   BucketItem,
   QuizQuestion,
-  Rsvp,
   Site,
   SiteBundle,
-  SiteEvent,
   SitePhoto,
   TimelineEntry,
 } from "@/lib/types";
@@ -26,37 +24,30 @@ async function loadChildren(
   db: AnyClient,
   siteId: string
 ): Promise<Omit<SiteBundle, "site">> {
-  const [events, photos, timeline, bucketList, quizQuestions] =
-    await Promise.all([
-      db
-        .from("site_events")
-        .select("*")
-        .eq("site_id", siteId)
-        .order("sort_order", { ascending: true }),
-      db
-        .from("site_photos")
-        .select("*")
-        .eq("site_id", siteId)
-        .order("sort_order", { ascending: true }),
-      db
-        .from("site_timeline")
-        .select("*")
-        .eq("site_id", siteId)
-        .order("sort_order", { ascending: true }),
-      db
-        .from("site_bucket_list")
-        .select("*")
-        .eq("site_id", siteId)
-        .order("sort_order", { ascending: true }),
-      db
-        .from("quiz_questions")
-        .select("*")
-        .eq("site_id", siteId)
-        .order("sort_order", { ascending: true }),
-    ]);
+  const [photos, timeline, bucketList, quizQuestions] = await Promise.all([
+    db
+      .from("site_photos")
+      .select("*")
+      .eq("site_id", siteId)
+      .order("sort_order", { ascending: true }),
+    db
+      .from("site_timeline")
+      .select("*")
+      .eq("site_id", siteId)
+      .order("sort_order", { ascending: true }),
+    db
+      .from("site_bucket_list")
+      .select("*")
+      .eq("site_id", siteId)
+      .order("sort_order", { ascending: true }),
+    db
+      .from("quiz_questions")
+      .select("*")
+      .eq("site_id", siteId)
+      .order("sort_order", { ascending: true }),
+  ]);
 
   return {
-    events: (events.data ?? []) as SiteEvent[],
     photos: (photos.data ?? []) as SitePhoto[],
     timeline: (timeline.data ?? []) as TimelineEntry[],
     bucketList: (bucketList.data ?? []) as BucketItem[],
@@ -136,20 +127,6 @@ export async function getMySite(): Promise<SiteBundle | null> {
 
   const children = await loadChildren(db, site.id);
   return { site: site as Site, ...children };
-}
-
-/**
- * RSVPs for a site the caller owns. RLS ("owner reads rsvps") is what scopes
- * this - a guest running the same query gets nothing back.
- */
-export async function getRsvps(siteId: string): Promise<Rsvp[]> {
-  const db = await createClient();
-  const { data } = await db
-    .from("rsvps")
-    .select("*")
-    .eq("site_id", siteId)
-    .order("created_at", { ascending: false });
-  return (data ?? []) as Rsvp[];
 }
 
 /**

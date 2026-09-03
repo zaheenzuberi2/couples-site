@@ -2,7 +2,6 @@
 
 import { useActionState } from "react";
 import { saveDetails, type ActionResult } from "@/app/dashboard/actions";
-import { tierConfig } from "@/lib/tiers";
 import type { Site, ThemeName } from "@/lib/types";
 import { Field, Section, buttonClass, inputClass } from "./ui";
 
@@ -17,8 +16,6 @@ const THEMES: { name: ThemeName; label: string; swatch: string[] }[] = [
 
 export default function DetailsForm({ site }: { site: Site }) {
   const [state, formAction, pending] = useActionState(saveDetails, initial);
-  const isWedding = site.mode === "wedding";
-  const config = tierConfig(site.tier);
 
   return (
     <form action={formAction}>
@@ -52,7 +49,7 @@ export default function DetailsForm({ site }: { site: Site }) {
             htmlFor="slug"
             hint={
               site.is_paid
-                ? "Locked, because invitations may already carry this link."
+                ? "Locked, because your link may already be shared."
                 : "Locks once your page goes live."
             }
           >
@@ -84,10 +81,7 @@ export default function DetailsForm({ site }: { site: Site }) {
             />
           </Field>
 
-          <Field
-            label={isWedding ? "The date" : "The date that matters"}
-            htmlFor="event_date"
-          >
+          <Field label="The date that matters" htmlFor="event_date">
             <input
               id="event_date"
               name="event_date"
@@ -99,10 +93,7 @@ export default function DetailsForm({ site }: { site: Site }) {
         </div>
       </Section>
 
-      <Section
-        title={isWedding ? "Your story" : "Your letter"}
-        hint="Press enter to start a new paragraph."
-      >
+      <Section title="Your letter" hint="Press enter to start a new paragraph.">
         <textarea
           name="story"
           rows={8}
@@ -112,113 +103,39 @@ export default function DetailsForm({ site }: { site: Site }) {
         />
       </Section>
 
-      <Section
-        title="Look and feel"
-        hint={
-          config.themes.length < THEMES.length
-            ? "Premium unlocks every colour theme."
-            : undefined
-        }
-      >
+      <Section title="Look and feel">
         <fieldset>
           <legend className="sr-only">Colour theme</legend>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {THEMES.map((theme) => {
-              const locked = !config.themes.includes(theme.name);
-              return (
-                <label
-                  key={theme.name}
-                  className={`border border-line bg-card p-3 transition-colors ${
-                    locked
-                      ? "cursor-not-allowed opacity-50"
-                      : "cursor-pointer has-checked:border-accent has-checked:bg-accent-soft"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="theme"
-                    value={theme.name}
-                    disabled={locked}
-                    defaultChecked={site.theme === theme.name}
-                    className="sr-only"
-                  />
-                  <span className="flex gap-1" aria-hidden>
-                    {theme.swatch.map((colour) => (
-                      <span
-                        key={colour}
-                        className="h-7 flex-1 border border-black/5"
-                        style={{ background: colour }}
-                      />
-                    ))}
-                  </span>
-                  <span className="mt-2 flex items-center gap-1.5 text-xs tracking-wide">
-                    {theme.label}
-                    {locked && (
-                      <span className="text-[0.6rem] tracking-[0.1em] text-muted uppercase">
-                        Premium
-                      </span>
-                    )}
-                  </span>
-                </label>
-              );
-            })}
+            {THEMES.map((theme) => (
+              <label
+                key={theme.name}
+                className="cursor-pointer border border-line bg-card p-3 transition-colors has-checked:border-accent has-checked:bg-accent-soft"
+              >
+                <input
+                  type="radio"
+                  name="theme"
+                  value={theme.name}
+                  defaultChecked={site.theme === theme.name}
+                  className="sr-only"
+                />
+                <span className="flex gap-1" aria-hidden>
+                  {theme.swatch.map((colour) => (
+                    <span
+                      key={colour}
+                      className="h-7 flex-1 border border-black/5"
+                      style={{ background: colour }}
+                    />
+                  ))}
+                </span>
+                <span className="mt-2 block text-xs tracking-wide">
+                  {theme.label}
+                </span>
+              </label>
+            ))}
           </div>
         </fieldset>
       </Section>
-
-      {isWedding && !config.rsvp && (
-        <Section title="Guests">
-          <p className="border border-dashed border-line px-5 py-6 text-sm leading-relaxed text-muted">
-            RSVPs and the event schedule are part of the Standard and Premium
-            packages. Message us to upgrade and they&apos;ll appear here.
-          </p>
-        </Section>
-      )}
-
-      {isWedding && config.rsvp && (
-        <Section title="Guests">
-          <div className="space-y-5">
-            <label className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                name="rsvp_enabled"
-                defaultChecked={site.rsvp_enabled}
-                className="mt-1 accent-[var(--accent)]"
-              />
-              <span>
-                <span className="text-sm">Collect RSVPs on my page</span>
-                <span className="mt-0.5 block text-xs text-muted">
-                  Replies appear in your dashboard. Guests never see them.
-                </span>
-              </span>
-            </label>
-
-            <Field label="Reply by" htmlFor="rsvp_deadline">
-              <input
-                id="rsvp_deadline"
-                name="rsvp_deadline"
-                type="date"
-                defaultValue={site.rsvp_deadline ?? ""}
-                className={`${inputClass} max-w-56`}
-              />
-            </Field>
-
-            <Field
-              label="A note about the venues"
-              htmlFor="venue_note"
-              hint="Parking, dress code, directions. Anything guests ask twice."
-            >
-              <textarea
-                id="venue_note"
-                name="venue_note"
-                rows={3}
-                defaultValue={site.venue_note}
-                className={`${inputClass} resize-y`}
-              />
-            </Field>
-          </div>
-        </Section>
-      )}
 
       <div className="mt-8 flex items-center gap-4">
         <button type="submit" disabled={pending} className={buttonClass}>

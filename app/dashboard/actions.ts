@@ -4,12 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { slugify, validateSlug } from "@/lib/slug";
-import { allowedTheme, tierConfig, TIER_ORDER } from "@/lib/tiers";
-import type { SiteMode, ThemeName, Tier } from "@/lib/types";
+import type { ThemeName } from "@/lib/types";
 
 export type ActionResult = { ok: boolean; message?: string };
 
-const MODES: SiteMode[] = ["wedding", "keepsake"];
 const THEMES: ThemeName[] = ["blush", "midnight", "sage", "gold"];
 
 function text(formData: FormData, key: string): string {
@@ -40,13 +38,13 @@ async function requireOwnedSite(siteId: string) {
   const { supabase, user } = await requireUser();
   const { data: site } = await supabase
     .from("sites")
-    .select("id, owner_id, is_paid, slug, tier")
+    .select("id, owner_id, is_paid, slug")
     .eq("id", siteId)
     .eq("owner_id", user.id)
     .maybeSingle();
 
   if (!site) redirect("/dashboard");
-  return { supabase, user, site: site as typeof site & { tier: Tier } };
+  return { supabase, user, site };
 }
 
 function refresh() {
@@ -68,12 +66,6 @@ export async function createSite(
     return { ok: false, message: "Both names are needed." };
   }
 
-  const modeRaw = text(formData, "mode") as SiteMode;
-  const mode: SiteMode = MODES.includes(modeRaw) ? modeRaw : "wedding";
-
-  const tierRaw = text(formData, "tier") as Tier;
-  const tier: Tier = TIER_ORDER.includes(tierRaw) ? tierRaw : "standard";
-
   const slug = slugify(text(formData, "slug"));
   const check = validateSlug(slug);
   if (!check.ok) return { ok: false, message: check.reason };
@@ -90,8 +82,6 @@ export async function createSite(
   const { error } = await supabase.from("sites").insert({
     owner_id: user.id,
     slug,
-    mode,
-    tier,
     partner_one: partnerOne,
     partner_two: partnerTwo,
   });
@@ -117,15 +107,8 @@ export async function saveDetails(
   const siteId = text(formData, "site_id");
   const { supabase, site } = await requireOwnedSite(siteId);
 
-  // Clamped server-side too, not just greyed out in the editor - a couple
-  // editing the raw form post can't smuggle in a theme or RSVP their tier
-  // doesn't include.
-  const config = tierConfig(site.tier);
   const themeRaw = text(formData, "theme") as ThemeName;
-  const theme = allowedTheme(
-    site.tier,
-    THEMES.includes(themeRaw) ? themeRaw : "blush"
-  );
+  const theme: ThemeName = THEMES.includes(themeRaw) ? themeRaw : "blush";
 
   const patch: Record<string, unknown> = {
     partner_one: text(formData, "partner_one"),
@@ -134,9 +117,6 @@ export async function saveDetails(
     story: String(formData.get("story") ?? ""),
     event_date: nullableDate(formData, "event_date"),
     theme,
-    venue_note: text(formData, "venue_note"),
-    rsvp_enabled: config.rsvp && formData.get("rsvp_enabled") === "on",
-    rsvp_deadline: nullableDate(formData, "rsvp_deadline"),
   };
 
   // Slug changes are allowed, but a live page changing address breaks every
@@ -169,67 +149,6 @@ export async function saveDetails(
 
   refresh();
   return { ok: true, message: "Saved" };
-}
-
-/* ------------------------------------------------------------- events */
-
-export async function addEvent(formData: FormData): Promise<void> {
-  const siteId = text(formData, "site_id");
-  const { supabase, site } = await requireOwnedSite(siteId);
-
-  // The events editor is hidden for tiers without this, but the action is
-  // still reachable directly - refuse it the same way.
-  if (!tierConfig(site.tier).events) return;
-
-  const { count } = await supabase
-    .from("site_events")
-    .select("id", { count: "exact", head: true })
-    .eq("site_id", siteId);
-
-  await supabase.from("site_events").insert({
-    site_id: siteId,
-    title: text(formData, "title") || "New event",
-    sort_order: count ?? 0,
-  });
-
-  refresh();
-}
-
-export async function saveEvent(formData: FormData): Promise<void> {
-  const siteId = text(formData, "site_id");
-  const { supabase } = await requireOwnedSite(siteId);
-
-  const startsAt = text(formData, "starts_at");
-
-  await supabase
-    .from("site_events")
-    .update({
-      title: text(formData, "title"),
-      // datetime-local gives "2027-02-14T19:00" with no zone; Postgres reads
-      // it in the server's zone, which is what the couple means locally.
-      starts_at: startsAt === "" ? null : startsAt,
-      venue: text(formData, "venue"),
-      address: text(formData, "address"),
-      map_url: text(formData, "map_url") || null,
-      dress_code: text(formData, "dress_code"),
-    })
-    .eq("id", text(formData, "event_id"))
-    .eq("site_id", siteId);
-
-  refresh();
-}
-
-export async function deleteEvent(formData: FormData): Promise<void> {
-  const siteId = text(formData, "site_id");
-  const { supabase } = await requireOwnedSite(siteId);
-
-  await supabase
-    .from("site_events")
-    .delete()
-    .eq("id", text(formData, "event_id"))
-    .eq("site_id", siteId);
-
-  refresh();
 }
 
 /* ----------------------------------------------------------- timeline */
@@ -283,7 +202,6 @@ export async function deleteTimelineEntry(formData: FormData): Promise<void> {
 }
 
 /* --------------------------------------------------------- bucket list */
-// Free on every plan - no tier check anywhere near these.
 
 export async function addBucketItem(formData: FormData): Promise<void> {
   const siteId = text(formData, "site_id");
@@ -331,7 +249,6 @@ export async function deleteBucketItem(formData: FormData): Promise<void> {
 }
 
 /* ---------------------------------------------------------------- quiz */
-// Free on every plan - no tier check anywhere near these.
 
 const MIN_OPTIONS = 2;
 const MAX_OPTIONS = 4;

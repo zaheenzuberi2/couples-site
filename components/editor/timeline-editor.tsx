@@ -3,26 +3,20 @@ import {
   deleteTimelineEntry,
   saveTimelineEntry,
 } from "@/app/dashboard/actions";
-import type { SiteMode, TimelineEntry } from "@/lib/types";
+import type { TimelineEntry } from "@/lib/types";
 import { Field, Section, ghostButtonClass, inputClass } from "./ui";
 
 export default function TimelineEditor({
   siteId,
   entries,
-  mode,
 }: {
   siteId: string;
   entries: TimelineEntry[];
-  mode: SiteMode;
 }) {
   return (
     <Section
       title="How it happened"
-      hint={
-        mode === "keepsake"
-          ? "The moments worth keeping: first meeting, first trip, the proposal."
-          : "Optional. A short timeline your guests will actually read."
-      }
+      hint="The moments worth keeping: first meeting, first trip, the proposal."
     >
       {entries.length === 0 && (
         <p className="mb-6 border border-dashed border-line px-5 py-8 text-center text-sm text-muted">

@@ -1,17 +1,10 @@
-export type SiteMode = "wedding" | "keepsake";
-
 export type ThemeName = "blush" | "midnight" | "sage" | "gold";
-
-/** Package purchased. See lib/tiers.ts for what each one includes. */
-export type Tier = "basic" | "standard" | "premium";
 
 export type Site = {
   id: string;
   owner_id: string;
   slug: string;
   preview_token: string;
-  mode: SiteMode;
-  tier: Tier;
   is_paid: boolean;
   is_published: boolean;
   partner_one: string;
@@ -21,26 +14,11 @@ export type Site = {
   event_date: string | null;
   hero_photo: string | null;
   theme: ThemeName;
-  venue_note: string;
-  rsvp_enabled: boolean;
-  rsvp_deadline: string | null;
   payment_screenshot: string | null;
   payment_note: string;
   payment_submitted_at: string | null;
   created_at: string;
   updated_at: string;
-};
-
-export type SiteEvent = {
-  id: string;
-  site_id: string;
-  title: string;
-  starts_at: string | null;
-  venue: string;
-  address: string;
-  map_url: string | null;
-  dress_code: string;
-  sort_order: number;
 };
 
 export type SitePhoto = {
@@ -61,18 +39,6 @@ export type TimelineEntry = {
   sort_order: number;
 };
 
-export type Rsvp = {
-  id: string;
-  site_id: string;
-  guest_name: string;
-  guest_email: string;
-  attending: boolean;
-  party_size: number;
-  message: string;
-  created_at: string;
-};
-
-/** Free on every plan - no tier check anywhere near this one. */
 export type BucketItem = {
   id: string;
   site_id: string;
@@ -82,7 +48,7 @@ export type BucketItem = {
   created_at: string;
 };
 
-/** Free on every plan. `options` is 2-4 strings; correct_index picks one. */
+/** `options` is 2-4 strings; correct_index picks one. */
 export type QuizQuestion = {
   id: string;
   site_id: string;
@@ -105,7 +71,6 @@ export type QuizAttempt = {
 /** Everything a public page needs, fetched in one go. */
 export type SiteBundle = {
   site: Site;
-  events: SiteEvent[];
   photos: SitePhoto[];
   timeline: TimelineEntry[];
   bucketList: BucketItem[];

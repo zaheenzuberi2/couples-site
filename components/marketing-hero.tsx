@@ -13,9 +13,9 @@ import { BRAND } from "@/lib/env";
  * is the one place on the whole site that gets to feel expensive.
  */
 export default function MarketingHero({
-  priceFrom,
+  price,
 }: {
-  priceFrom: string;
+  price: string;
 }) {
   const reduceMotion = useReducedMotion();
 
@@ -138,7 +138,7 @@ export default function MarketingHero({
         </motion.div>
 
         <motion.p variants={rise} className="mt-5 text-xs text-[#8f7d70]">
-          Free to build. From {priceFrom} when you&apos;re ready to go public.
+          Free to build. {price} when you&apos;re ready to go public.
         </motion.p>
       </motion.section>
     </div>

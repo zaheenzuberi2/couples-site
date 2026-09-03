@@ -7,10 +7,10 @@ import {
   BANK_ACCOUNT_NUMBER,
   BANK_IBAN,
   BANK_NAME,
+  PRICE_LABEL,
 } from "@/lib/env";
 import { formatDate } from "@/lib/format";
 import { createClient } from "@/lib/supabase/client";
-import { tierConfig } from "@/lib/tiers";
 import type { Site } from "@/lib/types";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
@@ -29,7 +29,6 @@ export default function PaymentPanel({ site }: { site: Site }) {
   const [note, setNote] = useState("");
   const [justSubmitted, setJustSubmitted] = useState(false);
 
-  const config = tierConfig(site.tier);
   const submittedAt = justSubmitted ? new Date().toISOString() : site.payment_submitted_at;
   const alreadySubmitted = Boolean(site.payment_screenshot) || justSubmitted;
 
@@ -76,10 +75,8 @@ export default function PaymentPanel({ site }: { site: Site }) {
   return (
     <>
       <p className="text-sm leading-relaxed">
-        You picked the <span className="font-medium">{config.name}</span>{" "}
-        package, <span className="font-medium">{config.price}</span>, once.
-        That buys your public address and everything the {config.name} plan
-        includes, for as long as you need it.
+        Going live costs <span className="font-medium">{PRICE_LABEL}</span>,
+        once. That buys your public address for as long as you need it.
       </p>
 
       <div className="mt-5 border border-line bg-background p-5">

@@ -1,8 +1,7 @@
 import type { Viewport } from "next";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing-hero";
-import { BRAND } from "@/lib/env";
-import { TIER_ORDER, TIERS } from "@/lib/tiers";
+import { BRAND, PRICE_LABEL } from "@/lib/env";
 
 // The page opens on a dark hero - the browser's own chrome should match it
 // rather than flash the light default from the root layout.
@@ -15,20 +14,21 @@ export const viewport: Viewport = {
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
-      <MarketingHero priceFrom={TIERS.basic.price} />
+      <MarketingHero price={PRICE_LABEL} />
 
-      {/* ----------------------------------------------------- two modes */}
+      {/* --------------------------------------------------------- pitch */}
       <section className="border-y border-line bg-card">
-        <div className="mx-auto grid max-w-5xl gap-px bg-line sm:grid-cols-2">
-          <Mode
-            title="A wedding invitation"
-            body="Your names and date up front, and every event on the schedule (mehndi, barat, walima) with venues, maps and dress code. Guests RSVP on the page, and the replies land in your dashboard. (Event schedule and RSVPs are on the Standard and Premium packages.)"
-          />
-          <Mode
-            title="A keepsake"
-            tag="The ultimate digital gift"
-            body="Better than flowers that die or chocolates that get eaten. No guest list, no schedule, just how you met, where you've been, and the photographs, laid out like something worth reading twice. Perfect for hard launching your relationship, an anniversary, or just because."
-          />
+        <div className="mx-auto max-w-2xl px-6 py-24 text-center">
+          <p className="text-xs tracking-[0.24em] text-accent uppercase">
+            The ultimate digital gift
+          </p>
+          <h2 className="mt-3 font-display text-4xl">A keepsake page</h2>
+          <p className="mt-5 leading-relaxed text-muted">
+            Better than flowers that die or chocolates that get eaten. Just
+            how you met, where you&apos;ve been, and the photographs, laid
+            out like something worth reading twice. Perfect for hard
+            launching your relationship, an anniversary, or just because.
+          </p>
         </div>
       </section>
 
@@ -36,7 +36,7 @@ export default function Home() {
       <section className="mx-auto w-full max-w-5xl px-6 py-24">
         <div className="text-center">
           <p className="text-xs tracking-[0.28em] text-muted uppercase">
-            Free on every package
+            Included with every page
           </p>
           <h2 className="mt-3 font-display text-4xl">
             A little more than a page
@@ -82,21 +82,31 @@ export default function Home() {
 
       {/* ------------------------------------------------------- pricing */}
       <section className="border-t border-line bg-card">
-        <div className="mx-auto max-w-5xl px-6 py-24 text-center">
+        <div className="mx-auto max-w-xl px-6 py-24 text-center">
           <p className="text-xs tracking-[0.28em] text-muted uppercase">
-            Three packages
+            One price
           </p>
-          <h2 className="mt-3 font-display text-4xl">Pick what you need</h2>
-          <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-            Once, not a subscription. Build for free on any package and pay
-            when you&apos;re ready to go public.
+          <p className="mt-5 font-display text-6xl">{PRICE_LABEL}</p>
+          <p className="mt-3 text-sm text-muted">
+            Once. Not a subscription.
           </p>
 
-          <div className="mx-auto mt-14 grid gap-6 text-left sm:grid-cols-3">
-            {TIER_ORDER.map((t) => (
-              <PricingCard key={t} tier={t} featured={t === "standard"} />
+          <ul className="mx-auto mt-10 max-w-sm space-y-3 text-left text-sm">
+            {[
+              "Your own web address",
+              "Unlimited photos and edits",
+              "Bucket list and a \"how well do you know us\" quiz",
+              "Looks right on every phone",
+            ].map((item) => (
+              <li key={item} className="flex items-start gap-3">
+                <span
+                  aria-hidden
+                  className="mt-1.5 h-1.5 w-1.5 shrink-0 rotate-45 bg-accent"
+                />
+                {item}
+              </li>
             ))}
-          </div>
+          </ul>
 
           <Link
             href="/login"
@@ -116,84 +126,11 @@ export default function Home() {
   );
 }
 
-function PricingCard({
-  tier,
-  featured,
-}: {
-  tier: keyof typeof TIERS;
-  featured: boolean;
-}) {
-  const config = TIERS[tier];
-  return (
-    <div
-      className={`flex flex-col p-7 ${
-        featured
-          ? "border-2 border-accent bg-background"
-          : "border border-line bg-background"
-      }`}
-    >
-      {featured && (
-        <span className="mb-3 self-start bg-accent px-2.5 py-1 text-[0.65rem] tracking-[0.14em] text-white uppercase">
-          Most couples pick this
-        </span>
-      )}
-      <h3 className="font-display text-2xl">{config.name}</h3>
-      <p className="mt-1 font-display text-4xl">{config.price}</p>
-      <p className="mt-2 text-sm text-muted">{config.tagline}</p>
-
-      <ul className="mt-6 flex-1 space-y-2.5 text-sm">
-        {config.features.map((item) => (
-          <li key={item} className="flex items-start gap-2.5">
-            <span
-              aria-hidden
-              className="mt-1.5 h-1.5 w-1.5 shrink-0 rotate-45 bg-accent"
-            />
-            {item}
-          </li>
-        ))}
-      </ul>
-
-      <Link
-        href="/login"
-        className={`mt-7 inline-block px-6 py-3 text-center text-xs tracking-[0.18em] uppercase ${
-          featured
-            ? "bg-accent text-white"
-            : "border border-line hover:border-accent hover:text-accent"
-        }`}
-      >
-        Start with {config.name}
-      </Link>
-    </div>
-  );
-}
-
 function GameCard({ title, body }: { title: string; body: string }) {
   return (
     <div className="border border-line bg-card p-8">
       <h3 className="font-display text-2xl">{title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-muted">{body}</p>
-    </div>
-  );
-}
-
-function Mode({
-  title,
-  tag,
-  body,
-}: {
-  title: string;
-  tag?: string;
-  body: string;
-}) {
-  return (
-    <div className="bg-card p-10">
-      {tag && (
-        <p className="text-xs tracking-[0.24em] text-accent uppercase">
-          {tag}
-        </p>
-      )}
-      <h2 className={`font-display text-3xl ${tag ? "mt-2" : ""}`}>{title}</h2>
-      <p className="mt-4 leading-relaxed text-muted">{body}</p>
     </div>
   );
 }

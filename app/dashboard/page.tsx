@@ -5,16 +5,13 @@ import { BrandMark } from "@/components/brand-mark";
 import BucketListEditor from "@/components/editor/bucket-list-editor";
 import CreateSiteForm from "@/components/editor/create-site-form";
 import DetailsForm from "@/components/editor/details-form";
-import EventsEditor from "@/components/editor/events-editor";
 import PhotoManager from "@/components/editor/photo-manager";
 import QuizEditor from "@/components/editor/quiz-editor";
 import PublishPanel from "@/components/editor/publish-panel";
-import RsvpList from "@/components/editor/rsvp-list";
 import TimelineEditor from "@/components/editor/timeline-editor";
 import { BRAND, isSupabaseConfigured, siteUrl } from "@/lib/env";
-import { getMySite, getRsvps } from "@/lib/data";
+import { getMySite } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
-import { tierConfig } from "@/lib/tiers";
 
 export const metadata: Metadata = {
   title: "Your page",
@@ -34,13 +31,6 @@ export default async function DashboardPage({
 
   const bundle = await getMySite();
   const { upgrade } = await searchParams;
-
-  const config = bundle ? tierConfig(bundle.site.tier) : null;
-
-  const rsvps =
-    bundle && bundle.site.mode === "wedding" && bundle.site.rsvp_enabled
-      ? await getRsvps(bundle.site.id)
-      : [];
 
   return (
     <div className="flex flex-1 flex-col">
@@ -71,11 +61,7 @@ export default async function DashboardPage({
                 <h1 className="font-display text-4xl">
                   {bundle.site.partner_one} &amp; {bundle.site.partner_two}
                 </h1>
-                <p className="mt-1 text-sm text-muted">
-                  {bundle.site.mode === "wedding"
-                    ? "Wedding invitation"
-                    : "Keepsake page"}
-                </p>
+                <p className="mt-1 text-sm text-muted">Keepsake page</p>
               </div>
               <a
                 href={`/preview/${bundle.site.preview_token}`}
@@ -94,14 +80,9 @@ export default async function DashboardPage({
 
             <DetailsForm site={bundle.site} />
 
-            {bundle.site.mode === "wedding" && config?.events && (
-              <EventsEditor siteId={bundle.site.id} events={bundle.events} />
-            )}
-
             <TimelineEditor
               siteId={bundle.site.id}
               entries={bundle.timeline}
-              mode={bundle.site.mode}
             />
 
             <BucketListEditor siteId={bundle.site.id} items={bundle.bucketList} />
@@ -112,12 +93,7 @@ export default async function DashboardPage({
               siteId={bundle.site.id}
               photos={bundle.photos}
               heroPhoto={bundle.site.hero_photo}
-              maxPhotos={config?.maxPhotos ?? Infinity}
             />
-
-            {bundle.site.mode === "wedding" && bundle.site.rsvp_enabled && (
-              <RsvpList rsvps={rsvps} />
-            )}
           </>
         )}
       </main>

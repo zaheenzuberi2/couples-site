@@ -1,6 +1,6 @@
 import { setPublished } from "@/app/dashboard/actions";
 import PaymentPanel from "@/components/editor/payment-panel";
-import { tierConfig } from "@/lib/tiers";
+import { PRICE_LABEL } from "@/lib/env";
 import type { Site } from "@/lib/types";
 
 /**
@@ -19,7 +19,6 @@ export default function PublishPanel({
   highlightUpgrade: boolean;
 }) {
   const live = site.is_paid && site.is_published;
-  const config = tierConfig(site.tier);
 
   return (
     <div
@@ -42,11 +41,9 @@ export default function PublishPanel({
       <dl className="mt-5 space-y-4 text-sm">
         <div>
           <dt className="text-xs tracking-[0.16em] text-muted uppercase">
-            Package
+            Price
           </dt>
-          <dd className="mt-1">
-            {config.name}, {config.price}
-          </dd>
+          <dd className="mt-1">{PRICE_LABEL}, once</dd>
         </div>
 
         <div>

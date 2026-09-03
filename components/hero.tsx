@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
-import { formatDate } from "@/lib/format";
+import { daysUntil, formatDate } from "@/lib/format";
 import type { SiteBundle } from "@/lib/types";
 
 /**
@@ -14,17 +14,14 @@ import type { SiteBundle } from "@/lib/types";
 export default function Hero({
   site,
   heroSrc,
-  countdown,
-  showRsvp,
 }: {
   site: SiteBundle["site"];
   heroSrc: string | null;
-  countdown: number | null;
-  showRsvp: boolean;
 }) {
   const names = [site.partner_one, site.partner_two].filter(Boolean);
   const hasPhoto = Boolean(heroSrc);
   const reduceMotion = useReducedMotion();
+  const countdown = daysUntil(site.event_date);
 
   // One staggered rise-and-fade, timed so the names lead and everything
   // else follows a beat behind - not six elements animating in unison.
@@ -155,20 +152,6 @@ export default function Hero({
           </motion.div>
         )}
 
-        {showRsvp && (
-          <motion.a
-            variants={rise}
-            href="#rsvp"
-            className="mt-12 inline-block border px-9 py-3.5 text-xs tracking-[0.22em] uppercase transition-colors duration-300"
-            style={
-              hasPhoto
-                ? { borderColor: "rgba(255,255,255,0.6)", color: "#fff" }
-                : { borderColor: "var(--gilt)", color: "var(--gilt)" }
-            }
-          >
-            RSVP
-          </motion.a>
-        )}
       </motion.div>
 
       {!reduceMotion && (
