@@ -106,17 +106,17 @@ export default function MarketingHero({
           variants={rise}
           className="font-display text-[clamp(2.7rem,8.5vw,5rem)] leading-[1.03] text-[#f8f1e6]"
         >
-          Send us your photos.
+          Falling in love was easy.
           <br />
-          Get back a website.
+          This is too.
         </motion.h1>
         <motion.p
           variants={rise}
           className="mx-auto mt-7 max-w-xl leading-relaxed text-[#cbb8a3]"
         >
-          Write a few lines, upload the photos you love, and your own page is
-          ready in minutes with your names, your story and your date. Share it
-          with everyone you&apos;re inviting, or keep it just between you.
+          Send your photos, write a few lines, and your own page is ready in
+          minutes with your names, your story and your date. Share it with
+          everyone you&apos;re inviting, or keep it just between you.
         </motion.p>
 
         <motion.div
