@@ -5,14 +5,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
-import type {
-  BucketItem,
-  QuizQuestion,
-  Site,
-  SiteBundle,
-  SitePhoto,
-  TimelineEntry,
-} from "@/lib/types";
+import type { Site, SiteBundle, SitePhoto, TimelineEntry } from "@/lib/types";
 
 // loadChildren runs the same queries against either the anon server client
 // or the service-role admin client - both are plain SupabaseClient instances,
@@ -24,7 +17,7 @@ async function loadChildren(
   db: AnyClient,
   siteId: string
 ): Promise<Omit<SiteBundle, "site">> {
-  const [photos, timeline, bucketList, quizQuestions] = await Promise.all([
+  const [photos, timeline] = await Promise.all([
     db
       .from("site_photos")
       .select("*")
@@ -35,23 +28,11 @@ async function loadChildren(
       .select("*")
       .eq("site_id", siteId)
       .order("sort_order", { ascending: true }),
-    db
-      .from("site_bucket_list")
-      .select("*")
-      .eq("site_id", siteId)
-      .order("sort_order", { ascending: true }),
-    db
-      .from("quiz_questions")
-      .select("*")
-      .eq("site_id", siteId)
-      .order("sort_order", { ascending: true }),
   ]);
 
   return {
     photos: (photos.data ?? []) as SitePhoto[],
     timeline: (timeline.data ?? []) as TimelineEntry[],
-    bucketList: (bucketList.data ?? []) as BucketItem[],
-    quizQuestions: (quizQuestions.data ?? []) as QuizQuestion[],
   };
 }
 

@@ -3,7 +3,6 @@ import { photoUrl } from "@/lib/data";
 import { formatDate, formatMonthYear } from "@/lib/format";
 import type { SiteBundle } from "@/lib/types";
 import Hero from "@/components/hero";
-import QuizWidget from "@/components/quiz-widget";
 
 /**
  * The couple's page: a keepsake love-story page. Every section is skipped
@@ -11,7 +10,7 @@ import QuizWidget from "@/components/quiz-widget";
  * deliberate rather than broken.
  */
 export default function CouplePage({ bundle }: { bundle: SiteBundle }) {
-  const { site, photos, timeline, bucketList, quizQuestions } = bundle;
+  const { site, photos, timeline } = bundle;
 
   const heroSrc = photoUrl(site.hero_photo) ?? photoUrl(photos[0]?.image_path);
   const galleryPhotos = site.hero_photo ? photos : photos.slice(1); // first photo was promoted to the hero
@@ -24,13 +23,7 @@ export default function CouplePage({ bundle }: { bundle: SiteBundle }) {
 
       {timeline.length > 0 && <Timeline entries={timeline} />}
 
-      {bucketList.length > 0 && <BucketList items={bucketList} />}
-
       {galleryPhotos.length > 0 && <Gallery photos={galleryPhotos} />}
-
-      {quizQuestions.length > 0 && (
-        <QuizWidget siteId={site.id} questions={quizQuestions} />
-      )}
 
       <Footer site={site} />
     </div>
@@ -106,76 +99,6 @@ function Timeline({ entries }: { entries: SiteBundle["timeline"] }) {
             </li>
           ))}
         </ol>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------------------------------------------------- bucket list */
-
-function BucketList({ items }: { items: SiteBundle["bucketList"] }) {
-  const done = items.filter((i) => i.done).length;
-
-  return (
-    <section
-      className="px-6 py-24 sm:py-32"
-      style={{ background: "var(--paper-alt)" }}
-    >
-      <div className="mx-auto max-w-xl">
-        <SectionHeading
-          eyebrow="Still to come"
-          title="Our bucket list"
-          subtitle={`${done} of ${items.length} done`}
-        />
-
-        <ul className="mt-10 space-y-3">
-          {items.map((item) => (
-            <li
-              key={item.id}
-              className="flex items-center gap-3 border px-4 py-3"
-              style={{
-                borderColor: "var(--rule)",
-                background: "var(--paper)",
-              }}
-            >
-              <span
-                aria-hidden
-                className="flex h-5 w-5 shrink-0 items-center justify-center border"
-                style={
-                  item.done
-                    ? { borderColor: "var(--gilt)", background: "var(--gilt)" }
-                    : { borderColor: "var(--rule)" }
-                }
-              >
-                {item.done && (
-                  <svg
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    className="h-3 w-3"
-                    style={{ color: "var(--paper)" }}
-                  >
-                    <path
-                      d="M3 8.5 6.5 12 13 4.5"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
-              </span>
-              <span
-                className="text-sm"
-                style={{
-                  color: item.done ? "var(--whisper)" : "var(--ink)",
-                  textDecoration: item.done ? "line-through" : undefined,
-                }}
-              >
-                {item.item}
-              </span>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );

@@ -35,6 +35,7 @@ const RESERVED = new Set([
   "well-known",
   "rsvp",
   "gallery",
+  "play",
 ]);
 
 export function slugify(input: string): string {

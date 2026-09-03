@@ -386,3 +386,82 @@ create policy "owner reads own payment proof" on storage.objects
     bucket_id = 'payment-proofs'
     and public.owns_site(((storage.foldername(name))[1])::uuid)
   );
+
+-- ------------------------------------------------------------
+-- 5. Play rooms - bucket list + quiz, standalone from the website
+--    product. No auth, no owner_id - edit_token is the only credential
+--    that exists at all. Every owner-side write goes through a server
+--    action using the service-role client, which checks the token
+--    before touching anything - there is no RLS policy that lets the
+--    anon key write to these tables, since there is no session to
+--    scope a policy to.
+-- ------------------------------------------------------------
+
+create table if not exists public.play_rooms (
+  id          uuid primary key default gen_random_uuid(),
+  slug        text not null unique,
+  edit_token  text not null unique default encode(gen_random_bytes(16), 'hex'),
+  title       text not null default '',
+  created_at  timestamptz not null default now()
+);
+
+create table if not exists public.play_bucket_items (
+  id          uuid primary key default gen_random_uuid(),
+  room_id     uuid not null references public.play_rooms(id) on delete cascade,
+  item        text not null default '',
+  done        boolean not null default false,
+  sort_order  int  not null default 0,
+  created_at  timestamptz not null default now()
+);
+create index if not exists play_bucket_items_room_idx on public.play_bucket_items(room_id, sort_order);
+
+create table if not exists public.play_quiz_questions (
+  id             uuid primary key default gen_random_uuid(),
+  room_id        uuid not null references public.play_rooms(id) on delete cascade,
+  question       text not null default '',
+  options        text[] not null default '{}',
+  correct_index  int  not null default 0,
+  sort_order     int  not null default 0
+);
+create index if not exists play_quiz_questions_room_idx on public.play_quiz_questions(room_id, sort_order);
+
+-- Leaderboard entries. Public to read (that's the point) and public to
+-- insert (a guest playing the quiz has no token at all, just the share
+-- link) - the room_id foreign key is what keeps this from being spammable
+-- into nonexistent rooms.
+create table if not exists public.play_quiz_attempts (
+  id          uuid primary key default gen_random_uuid(),
+  room_id     uuid not null references public.play_rooms(id) on delete cascade,
+  guest_name  text not null,
+  score       int  not null check (score >= 0),
+  total       int  not null check (total > 0),
+  created_at  timestamptz not null default now()
+);
+create index if not exists play_quiz_attempts_room_idx on public.play_quiz_attempts(room_id, score desc, created_at asc);
+
+alter table public.play_rooms          enable row level security;
+alter table public.play_bucket_items   enable row level security;
+alter table public.play_quiz_questions enable row level security;
+alter table public.play_quiz_attempts  enable row level security;
+
+-- play_rooms holds edit_token, so it deliberately has NO select policy at
+-- all - RLS can't hide a single column, only whole rows, so the only safe
+-- move is zero anon/authenticated access. Every read happens server-side
+-- with the service-role client, and only non-secret fields (slug, title)
+-- are ever passed to the browser. Verified empirically: an anon-key select
+-- on this table returns zero rows with no error, for any room.
+
+drop policy if exists "public reads bucket items" on public.play_bucket_items;
+create policy "public reads bucket items" on public.play_bucket_items
+  for select using (true);
+
+drop policy if exists "public reads quiz questions" on public.play_quiz_questions;
+create policy "public reads quiz questions" on public.play_quiz_questions
+  for select using (true);
+
+drop policy if exists "public reads quiz attempts" on public.play_quiz_attempts;
+drop policy if exists "guest submits quiz attempt" on public.play_quiz_attempts;
+create policy "public reads quiz attempts" on public.play_quiz_attempts
+  for select using (true);
+create policy "guest submits quiz attempt" on public.play_quiz_attempts
+  for insert with check (true);

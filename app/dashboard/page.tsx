@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { BrandMark } from "@/components/brand-mark";
-import BucketListEditor from "@/components/editor/bucket-list-editor";
 import CreateSiteForm from "@/components/editor/create-site-form";
 import DetailsForm from "@/components/editor/details-form";
 import PhotoManager from "@/components/editor/photo-manager";
-import QuizEditor from "@/components/editor/quiz-editor";
 import PublishPanel from "@/components/editor/publish-panel";
 import TimelineEditor from "@/components/editor/timeline-editor";
 import { BRAND, isSupabaseConfigured, siteUrl } from "@/lib/env";
@@ -85,15 +83,23 @@ export default async function DashboardPage({
               entries={bundle.timeline}
             />
 
-            <BucketListEditor siteId={bundle.site.id} items={bundle.bucketList} />
-
-            <QuizEditor siteId={bundle.site.id} questions={bundle.quizQuestions} />
-
             <PhotoManager
               siteId={bundle.site.id}
               photos={bundle.photos}
               heroPhoto={bundle.site.hero_photo}
             />
+
+            <p className="mt-12 border-t border-line pt-8 text-sm text-muted">
+              Looking for a bucket list or a &quot;how well do you know
+              us&quot; quiz?{" "}
+              <Link
+                href="/play"
+                className="text-accent underline underline-offset-4"
+              >
+                Make one for free
+              </Link>{" "}
+              — no page needed.
+            </p>
           </>
         )}
       </main>
