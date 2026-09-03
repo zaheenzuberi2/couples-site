@@ -30,7 +30,7 @@ export default async function PreviewPage({
   return (
     <>
       {/* Banner is outside [data-theme] so it never inherits the couple's palette. */}
-      <div className="sticky top-0 z-50 border-b border-line bg-card/95 backdrop-blur">
+      <div className="pt-safe sticky top-0 z-50 border-b border-line bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3 text-sm">
           {live ? (
             <>

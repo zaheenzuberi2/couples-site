@@ -47,7 +47,7 @@ export default function Hero({
   };
 
   return (
-    <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 py-28">
+    <section className="pt-safe relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 py-28">
       {hasPhoto ? (
         <>
           <motion.div

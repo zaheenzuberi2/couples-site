@@ -136,7 +136,7 @@ export default function PaymentPanel({ site }: { site: Site }) {
               onChange={(e) => setNote(e.target.value)}
               rows={2}
               placeholder="Anything that helps us match it: reference number, sender name…"
-              className="mt-3 w-full resize-none border border-line bg-background px-3.5 py-2.5 text-sm outline-none focus:border-accent"
+              className="mt-3 w-full resize-none border border-line bg-background px-3.5 py-2.5 text-base outline-none focus:border-accent sm:text-sm"
             />
             <label
               htmlFor="payment-proof-input"

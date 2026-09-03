@@ -84,7 +84,7 @@ export default function MarketingHero({
         </div>
       )}
 
-      <header className="relative z-10 mx-auto flex w-full max-w-5xl items-center px-6 py-6">
+      <header className="pt-safe relative z-10 mx-auto flex w-full max-w-5xl items-center px-6 py-6">
         <span className="font-display text-2xl text-[#f5ece0]">{BRAND}</span>
         <Link
           href="/login"

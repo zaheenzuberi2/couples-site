@@ -1,7 +1,16 @@
+import type { Viewport } from "next";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing-hero";
 import { BRAND } from "@/lib/env";
 import { TIER_ORDER, TIERS } from "@/lib/tiers";
+
+// The page opens on a dark hero - the browser's own chrome should match it
+// rather than flash the light default from the root layout.
+export const viewport: Viewport = {
+  themeColor: "#160f14",
+  colorScheme: "dark",
+  viewportFit: "cover",
+};
 
 export default function Home() {
   return (

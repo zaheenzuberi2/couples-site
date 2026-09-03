@@ -33,6 +33,26 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  /* Stops the page rubber-banding into the browser's own background on
+     iOS - without this, overscrolling at the top or bottom of a dark hero
+     flashes the wrong color for a frame, which reads as unfinished. */
+  overscroll-behavior-y: contain;
+}
+
+/* The gray flash Android/iOS paint on every tap by default. A native app
+   never shows this - buttons and links get their own hover/active state
+   instead, defined per component. */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Full-bleed sections (the hero, sticky bars) should clear the notch and
+   home-indicator on iPhones rather than sit under them. */
+.pt-safe {
+  padding-top: max(env(safe-area-inset-top), 0px);
+}
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
 }
 
 /* ============================================================

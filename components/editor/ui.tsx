@@ -45,8 +45,11 @@ export function Field({
   );
 }
 
+// text-base (16px), not text-sm - anything smaller makes iOS Safari zoom the
+// whole viewport in on focus, which is exactly the kind of thing that makes
+// a site feel like a web page and not an app.
 export const inputClass =
-  "w-full border border-line bg-card px-3.5 py-2.5 text-sm outline-none focus:border-accent";
+  "w-full border border-line bg-card px-3.5 py-2.5 text-base outline-none focus:border-accent sm:text-sm";
 
 export const buttonClass =
   "bg-accent px-6 py-3 text-xs tracking-[0.2em] text-white uppercase transition-opacity disabled:opacity-50";

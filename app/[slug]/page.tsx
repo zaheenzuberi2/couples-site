@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import CouplePage from "@/components/couple-page";
 import { getPublicSite, photoUrl } from "@/lib/data";
 import { formatDate } from "@/lib/format";
+import { allowedTheme } from "@/lib/tiers";
+import { THEME_PAPER_COLOR } from "@/lib/theme-colors";
 
 /**
  * The couple's public page, at the root of the domain: /sarah-and-ali
@@ -45,6 +47,22 @@ export async function generateMetadata({
       description: site.tagline || names,
       images: image ? [image] : undefined,
     },
+  };
+}
+
+export async function generateViewport({
+  params,
+}: PageProps<"/[slug]">): Promise<Viewport> {
+  const { slug } = await params;
+  const bundle = await getPublicSite(slug);
+  if (!bundle) return {};
+
+  const theme = allowedTheme(bundle.site.tier, bundle.site.theme);
+  const color = THEME_PAPER_COLOR[theme];
+  return {
+    themeColor: color,
+    colorScheme: theme === "midnight" ? "dark" : "light",
+    viewportFit: "cover",
   };
 }
 

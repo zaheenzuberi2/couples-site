@@ -57,7 +57,7 @@ export default function DetailsForm({ site }: { site: Site }) {
             }
           >
             <div className="flex items-center border border-line bg-card focus-within:border-accent">
-              <span className="shrink-0 py-2.5 pl-3.5 text-sm text-muted">
+              <span className="shrink-0 py-2.5 pl-3.5 text-base text-muted sm:text-sm">
                 /
               </span>
               <input
@@ -65,7 +65,7 @@ export default function DetailsForm({ site }: { site: Site }) {
                 name="slug"
                 defaultValue={site.slug}
                 readOnly={site.is_paid}
-                className="w-full bg-transparent py-2.5 pr-3.5 text-sm outline-none read-only:text-muted"
+                className="w-full bg-transparent py-2.5 pr-3.5 text-base outline-none read-only:text-muted sm:text-sm"
               />
             </div>
           </Field>
@@ -101,7 +101,7 @@ export default function DetailsForm({ site }: { site: Site }) {
 
       <Section
         title={isWedding ? "Your story" : "Your letter"}
-        hint="Leave a blank line between paragraphs."
+        hint="Press enter to start a new paragraph."
       >
         <textarea
           name="story"
