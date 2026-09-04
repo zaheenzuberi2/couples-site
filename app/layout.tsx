@@ -29,6 +29,12 @@ export const metadata: Metadata = {
   },
   description:
     "Send us your photos and a few words. We turn them into a website you can share with everyone you love.",
+  // The auto-detected icon.tsx/apple-icon.tsx files are capped at the sizes
+  // those devices expect (32px, 180px) - this adds a real 512px mark for
+  // anything else that wants a proper logo (PWA installs, brand-kit tools).
+  icons: {
+    other: { rel: "icon", url: "/brand-logo", sizes: "512x512" },
+  },
 };
 
 // Overridden per couple page (their own theme) and on the marketing
