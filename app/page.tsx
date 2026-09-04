@@ -121,8 +121,8 @@ export default function Home() {
               The perfect surprise gift
             </h2>
             <p className="mx-auto mt-5 max-w-md leading-relaxed text-muted">
-              For a girlfriend, boyfriend, or partner who has everything
-              except a place to keep the two of you.
+              For your partner who has everything except a place to keep
+              the two of you.
             </p>
           </Reveal>
 
