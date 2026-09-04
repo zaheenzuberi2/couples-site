@@ -60,6 +60,10 @@ export default function Hero({
               preload
               sizes="100vw"
               className="object-cover"
+              // SVGs (only ever the /demo page's illustrated placeholders -
+              // a real photo upload is never .svg) skip the optimizer,
+              // which otherwise refuses to process SVG sources at all.
+              unoptimized={heroSrc?.endsWith(".svg")}
             />
           </motion.div>
           {/* Scrim: keeps the names legible over any photo, light or dark. */}

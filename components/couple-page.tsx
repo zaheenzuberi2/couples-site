@@ -131,6 +131,7 @@ function Gallery({ photos }: { photos: SiteBundle["photos"] }) {
                   height={1000}
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 380px"
                   className="h-auto w-full object-cover"
+                  unoptimized={src.endsWith(".svg")}
                 />
                 {photo.caption.trim() && (
                   <figcaption

@@ -36,6 +36,8 @@ const demoBundle: SiteBundle = {
     story:
       "We didn't plan any of this. A shared table at a friend's dinner, then a conversation that ran three hours too long.\n\nSince then it's been ordinary days that turned out to matter - the long drives, the bad jokes, the quiet nights we still remember better than the big ones.\n\nThis page is where we're keeping it, so we never have to explain it from memory again.",
     event_date: "2026-12-24",
+    // No hero_photo set - CouplePage promotes photos[0] to the hero
+    // automatically, same as it would for a real couple who hasn't set one.
     hero_photo: null,
     theme: "gold",
     payment_screenshot: null,
@@ -44,7 +46,44 @@ const demoBundle: SiteBundle = {
     created_at: "2026-01-01T00:00:00.000Z",
     updated_at: "2026-01-01T00:00:00.000Z",
   },
-  photos: [],
+  // Illustrated character avatars (dicebear.com, CC0/MIT-licensed, no real
+  // person's likeness) rather than photos of real strangers - this is a
+  // fictional demo couple, so the photos should read as obviously fictional
+  // too. Served from /public/demo, not Supabase.
+  photos: [
+    {
+      id: "demo-photo-1",
+      site_id: "demo",
+      image_path: "/demo/photo-1.svg",
+      caption: "",
+      sort_order: 0,
+      created_at: "2026-01-01T00:00:00.000Z",
+    },
+    {
+      id: "demo-photo-2",
+      site_id: "demo",
+      image_path: "/demo/photo-2.svg",
+      caption: "Zara",
+      sort_order: 1,
+      created_at: "2026-01-01T00:00:00.000Z",
+    },
+    {
+      id: "demo-photo-3",
+      site_id: "demo",
+      image_path: "/demo/photo-3.svg",
+      caption: "The first trip",
+      sort_order: 2,
+      created_at: "2026-01-01T00:00:00.000Z",
+    },
+    {
+      id: "demo-photo-4",
+      site_id: "demo",
+      image_path: "/demo/photo-4.svg",
+      caption: "Us, today",
+      sort_order: 3,
+      created_at: "2026-01-01T00:00:00.000Z",
+    },
+  ],
   timeline: [
     {
       id: "demo-1",

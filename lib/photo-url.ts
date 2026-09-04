@@ -10,8 +10,10 @@ export function photoUrlClient(
   imagePath: string | null | undefined
 ): string | null {
   if (!imagePath) return null;
-  // Already absolute - use as-is.
-  if (/^https?:\/\//i.test(imagePath)) return imagePath;
+  // Already absolute, or a local /public asset (used by the /demo page,
+  // which has no real Supabase row behind it) - use as-is either way.
+  if (/^https?:\/\//i.test(imagePath) || imagePath.startsWith("/"))
+    return imagePath;
   if (!SUPABASE_URL) return null;
   return `${SUPABASE_URL}/storage/v1/object/public/couple-photos/${imagePath}`;
 }
