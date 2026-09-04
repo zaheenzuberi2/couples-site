@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import { AnimatedBrandMark } from "@/components/animated-brand-mark";
@@ -14,8 +15,17 @@ import { BRAND } from "@/lib/env";
  */
 export default function MarketingHero({
   price,
+  exampleUrl,
 }: {
   price: string;
+  /**
+   * Host for the mockup's fake URL bar, e.g. "ours.example.com" - computed
+   * server-side (siteUrl() reads env vars only the server has) and passed
+   * in, rather than called here: this is a Client Component, and calling
+   * it here would render a different value on the server than in the
+   * browser and fail hydration.
+   */
+  exampleUrl: string;
 }) {
   const reduceMotion = useReducedMotion();
 
@@ -107,7 +117,7 @@ export default function MarketingHero({
             Pricing
           </a>
           <Link href="/play" className="transition-colors hover:text-[#e8c98a]">
-            Play
+            Free Date Tools
           </Link>
         </nav>
 
@@ -123,47 +133,129 @@ export default function MarketingHero({
         variants={container}
         initial="hidden"
         animate="show"
-        className="relative z-10 mx-auto w-full max-w-3xl px-6 pt-14 pb-28 text-center sm:pt-20"
+        className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-16 px-6 pt-14 pb-24 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:pt-20 lg:pb-28"
       >
-        <motion.h1
-          variants={rise}
-          className="font-display text-[clamp(2.7rem,8.5vw,5rem)] leading-[1.03] text-[#f8f1e6]"
-        >
-          Everyone gets a caption.
-          <br />
-          You get a website.
-        </motion.h1>
-        <motion.p
-          variants={rise}
-          className="mx-auto mt-7 max-w-xl leading-relaxed text-[#cbb8a3]"
-        >
-          Send your photos, write a few lines, and your own page is ready in
-          minutes with your names, your story and your date. Share it with
-          everyone you&apos;re inviting, or keep it just between you.
-        </motion.p>
+        <div className="text-center lg:text-left">
+          <motion.h1
+            variants={rise}
+            className="font-display text-[clamp(2.7rem,7.5vw,4.5rem)] leading-[1.05] text-[#f8f1e6]"
+          >
+            Everyone gets a caption.
+            <br />
+            Give your partner a website.
+          </motion.h1>
+          <motion.p
+            variants={rise}
+            className="mx-auto mt-7 max-w-xl leading-relaxed text-[#cbb8a3] lg:mx-0"
+          >
+            Stop letting your best memories get buried in the camera roll.
+            Create a beautiful, living timeline of your love story, track
+            your bucket lists, and hard-launch your relationship. The
+            ultimate digital anniversary or &quot;just because&quot; gift.
+          </motion.p>
 
-        <motion.div
-          variants={rise}
-          className="mt-10 flex flex-wrap justify-center gap-4"
-        >
-          <Link
-            href="/login"
-            className="bg-[#e8c98a] px-8 py-3.5 text-xs tracking-[0.2em] text-[#231419] uppercase transition-colors hover:bg-[#f2d9a2]"
+          <motion.div
+            variants={rise}
+            className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-4 lg:justify-start"
           >
-            Start your page
-          </Link>
-          <a
-            href="#how"
-            className="border border-[#4a3a3f] px-8 py-3.5 text-xs tracking-[0.2em] text-[#f5ece0] uppercase transition-colors hover:border-[#e8c98a] hover:text-[#e8c98a]"
-          >
-            See how it works
-          </a>
+            <Link
+              href="/login"
+              className="group relative bg-[#e8c98a] px-8 py-3.5 text-xs font-medium tracking-[0.2em] text-[#231419] uppercase shadow-[0_8px_24px_-8px_rgba(232,201,138,0.5)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#f2d9a2] hover:shadow-[0_14px_32px_-10px_rgba(232,201,138,0.65)] active:translate-y-0"
+            >
+              Create Free Gift Page
+            </Link>
+            <Link
+              href="/demo"
+              className="group inline-flex items-center gap-1.5 text-xs tracking-[0.2em] text-[#f5ece0] uppercase transition-colors hover:text-[#e8c98a]"
+            >
+              <span className="underline decoration-[#4a3a3f] underline-offset-8 transition-colors group-hover:decoration-[#e8c98a]">
+                See a Live Example
+              </span>
+              <span
+                aria-hidden
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </Link>
+          </motion.div>
+
+          <motion.p variants={rise} className="mt-5 text-xs text-[#8f7d70]">
+            Free to build. {price} when you&apos;re ready to go public.
+          </motion.p>
+        </div>
+
+        <motion.div variants={rise}>
+          <HeroPreviewMockup exampleUrl={exampleUrl} />
         </motion.div>
-
-        <motion.p variants={rise} className="mt-5 text-xs text-[#8f7d70]">
-          Free to build. {price} when you&apos;re ready to go public.
-        </motion.p>
       </motion.section>
     </div>
+  );
+}
+
+/**
+ * A real miniature of the actual product (the /demo couple, gold theme)
+ * inside a browser-chrome frame - proof next to the pitch instead of only
+ * a claim. Links straight to /demo, so it doubles as a live example.
+ */
+function HeroPreviewMockup({ exampleUrl }: { exampleUrl: string }) {
+  return (
+    <Link
+      href="/demo"
+      className="group mx-auto block max-w-sm overflow-hidden rounded-2xl shadow-[0_40px_90px_-30px_rgba(0,0,0,0.6)] transition-transform duration-500 ease-out hover:-translate-y-1.5"
+    >
+      <div className="flex items-center gap-1.5 border-b border-[#e7e1db] bg-[#fbf9f7] px-4 py-3">
+        <span className="h-2 w-2 rounded-full bg-[#e7e1db]" />
+        <span className="h-2 w-2 rounded-full bg-[#e7e1db]" />
+        <span className="h-2 w-2 rounded-full bg-[#e7e1db]" />
+        <span className="ml-3 truncate rounded-full border border-[#e7e1db] px-3 py-1 text-[10px] tracking-wide text-[#78716c]">
+          {exampleUrl}/zara-and-ayesha
+        </span>
+      </div>
+
+      <div data-theme="gold" className="px-8 py-10 text-center" style={{ background: "var(--paper)" }}>
+        <p className="display text-3xl" style={{ color: "var(--ink)" }}>
+          Zara{" "}
+          <span className="italic" style={{ color: "var(--gilt)" }}>
+            &amp;
+          </span>{" "}
+          Ayesha
+        </p>
+
+        <div className="rule-diamond mx-auto mt-4 max-w-[7rem]">
+          <span
+            aria-hidden
+            className="h-1.5 w-1.5 shrink-0 rotate-45"
+            style={{ background: "var(--gilt)" }}
+          />
+        </div>
+
+        <p className="eyebrow mt-4">24 December 2026</p>
+
+        <div className="mt-7 grid grid-cols-4 gap-2">
+          {[
+            "/demo/photo-1.svg",
+            "/demo/photo-2.svg",
+            "/demo/photo-3.svg",
+            "/demo/photo-4.svg",
+          ].map((src) => (
+            <div
+              key={src}
+              className="aspect-square overflow-hidden rounded-lg"
+              style={{ background: "var(--paper-alt)" }}
+            >
+              <Image
+                src={src}
+                alt=""
+                width={80}
+                height={80}
+                unoptimized
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </Link>
   );
 }

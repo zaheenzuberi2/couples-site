@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing-hero";
 import { Reveal } from "@/components/reveal";
@@ -26,6 +25,24 @@ export const viewport: Viewport = {
   colorScheme: "dark",
   viewportFit: "cover",
 };
+
+const GIFT_CARDS = [
+  {
+    icon: "🎁",
+    title: "The Ultimate Digital Gift",
+    body: "Better than flowers that die or chocolates that get eaten. A permanent keepsake layout of how you met, your favorite dates, and inside jokes.",
+  },
+  {
+    icon: "🚀",
+    title: "Perfect for a “Hard Launch”",
+    body: "Get a clean, custom web link made perfectly to share in your Instagram or TikTok bio to make it official.",
+  },
+  {
+    icon: "⏳",
+    title: "Milestone & Anniversary Trackers",
+    body: "A live counter showing exactly how many days you've been together, with countdowns to your next big trip or anniversary.",
+  },
+];
 
 export default function Home() {
   const jsonLd = {
@@ -70,26 +87,39 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <MarketingHero price={PRICE_LABEL} />
+      <MarketingHero
+        price={PRICE_LABEL}
+        exampleUrl={siteUrl().replace(/^https?:\/\//, "")}
+      />
 
-      {/* --------------------------------------------------------- pitch */}
+      {/* ---------------------------------------------------- perfect gift */}
       <section className="border-y border-line bg-card">
-        <div className="mx-auto grid max-w-5xl gap-16 px-6 py-24 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-12">
-          <Reveal className="text-center lg:text-left">
+        <div className="mx-auto max-w-5xl px-6 py-24">
+          <Reveal className="mx-auto max-w-xl text-center">
             <h2 className="font-display text-4xl sm:text-5xl">
-              The ultimate digital gift
+              The perfect surprise gift
             </h2>
-            <p className="mx-auto mt-5 max-w-md leading-relaxed text-muted lg:mx-0">
-              Better than flowers that die or chocolates that get eaten. Just
-              how you met, where you&apos;ve been, and the photographs, laid
-              out like something worth reading twice. Perfect for hard
-              launching your relationship, an anniversary, or just because.
+            <p className="mx-auto mt-5 max-w-md leading-relaxed text-muted">
+              For a girlfriend, boyfriend, or partner who has everything
+              except a place to keep the two of you.
             </p>
           </Reveal>
 
-          <Reveal delay={0.15}>
-            <PagePreviewMockup />
-          </Reveal>
+          <div className="mt-16 grid gap-6 sm:grid-cols-3">
+            {GIFT_CARDS.map((card, i) => (
+              <Reveal key={card.title} delay={i * 0.1}>
+                <div className="h-full border border-line bg-background p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgba(28,25,23,0.25)]">
+                  <span aria-hidden className="text-3xl">
+                    {card.icon}
+                  </span>
+                  <h3 className="mt-4 font-display text-xl">{card.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    {card.body}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -105,18 +135,18 @@ export default function Home() {
           <ol className="mt-16 grid gap-14 sm:grid-cols-3">
             <Step
               n="01"
-              title="Tell us who you are"
-              body="Two names and a web address. That's the whole sign-up."
+              title="Name Your Page"
+              body="Enter your names and claim your custom web address in seconds."
             />
             <Step
               n="02"
-              title="Add your photos and words"
-              body="Drag in the photos, write your story, pick a colour. Change any of it whenever you like."
+              title="Drop in Your Memories"
+              body="Drag in photos from your camera roll, write your story, and pick your favorite color theme."
             />
             <Step
               n="03"
-              title="Share it"
-              body="You get a private link straight away. Pay when you want the public address."
+              title="Gift it or Share it"
+              body="Get a private link instantly to share as a surprise gift, or go public when you are ready to show the world."
             />
           </ol>
         </Reveal>
@@ -148,7 +178,7 @@ export default function Home() {
             </p>
             <Link
               href="/play"
-              className="mt-8 inline-block bg-accent px-8 py-3.5 text-xs tracking-[0.2em] text-white uppercase"
+              className="mt-8 inline-block bg-accent px-8 py-3.5 text-xs font-medium tracking-[0.2em] text-white uppercase shadow-[0_8px_24px_-8px_rgba(156,63,91,0.4)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-10px_rgba(156,63,91,0.55)] active:translate-y-0"
             >
               Try it free
             </Link>
@@ -171,14 +201,22 @@ export default function Home() {
           }}
         />
         <Reveal className="relative mx-auto max-w-xl px-6 py-24 text-center">
-          <p className="font-display text-6xl sm:text-7xl">{PRICE_LABEL}</p>
+          <h2 className="font-display text-4xl sm:text-5xl">
+            One Small Price. Lifetime Keepsake.
+          </h2>
+
+          <p className="mt-8 font-display text-6xl sm:text-7xl">{PRICE_LABEL}</p>
           <p className="mt-3 text-sm text-muted">Once. Not a subscription.</p>
+          <p className="mt-2 text-sm text-accent">
+            Cheaper than a single dinner date. Kept forever.
+          </p>
 
           <ul className="mx-auto mt-10 max-w-sm space-y-3 text-left text-sm">
             {[
-              "Your own web address",
-              "Unlimited photos and edits",
-              "Looks right on every phone",
+              `Your own premium custom web address (${siteUrl().replace(/^https?:\/\//, "")}/your-names)`,
+              "Unlimited photo uploads, edits, and updates",
+              "Fully mobile-responsive (looks like a native app on every phone)",
+              "Live countdown widgets & interactive date bucket lists",
             ].map((item) => (
               <li key={item} className="flex items-start gap-3">
                 <span
@@ -192,7 +230,7 @@ export default function Home() {
 
           <Link
             href="/login"
-            className="mt-12 inline-block bg-accent px-8 py-3.5 text-xs tracking-[0.2em] text-white uppercase"
+            className="mt-12 inline-block bg-accent px-8 py-3.5 text-xs font-medium tracking-[0.2em] text-white uppercase shadow-[0_8px_24px_-8px_rgba(156,63,91,0.4)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-10px_rgba(156,63,91,0.55)] active:translate-y-0"
           >
             Start, it&apos;s free to try
           </Link>
@@ -234,77 +272,6 @@ function Step({ n, title, body }: { n: string; title: string; body: string }) {
       <h3 className="mt-3 text-lg">{title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>
     </li>
-  );
-}
-
-/**
- * Shows the actual product instead of describing it - a miniature of a real
- * themed page (the /demo couple, gold theme), inside a browser-chrome frame.
- * Links straight to /demo so "just a mockup" becomes the real thing on click.
- */
-function PagePreviewMockup() {
-  return (
-    <Link
-      href="/demo"
-      className="group mx-auto block max-w-sm overflow-hidden rounded-2xl border border-line bg-card shadow-[0_30px_70px_-30px_rgba(28,20,15,0.45)] transition-transform duration-500 ease-out hover:-translate-y-1.5"
-    >
-      <div className="flex items-center gap-1.5 border-b border-line bg-background px-4 py-3">
-        <span className="h-2 w-2 rounded-full bg-line" />
-        <span className="h-2 w-2 rounded-full bg-line" />
-        <span className="h-2 w-2 rounded-full bg-line" />
-        <span className="ml-3 truncate rounded-full border border-line px-3 py-1 text-[10px] tracking-wide text-muted">
-          {siteUrl().replace(/^https?:\/\//, "")}/zara-and-ayesha
-        </span>
-      </div>
-
-      <div
-        data-theme="gold"
-        className="px-8 py-10 text-center"
-        style={{ background: "var(--paper)" }}
-      >
-        <p className="display text-3xl" style={{ color: "var(--ink)" }}>
-          Zara{" "}
-          <span className="italic" style={{ color: "var(--gilt)" }}>
-            &amp;
-          </span>{" "}
-          Ayesha
-        </p>
-
-        <div className="rule-diamond mx-auto mt-4 max-w-[7rem]">
-          <span
-            aria-hidden
-            className="h-1.5 w-1.5 shrink-0 rotate-45"
-            style={{ background: "var(--gilt)" }}
-          />
-        </div>
-
-        <p className="eyebrow mt-4">24 December 2026</p>
-
-        <div className="mt-7 grid grid-cols-4 gap-2">
-          {[
-            "/demo/photo-1.svg",
-            "/demo/photo-2.svg",
-            "/demo/photo-3.svg",
-            "/demo/photo-4.svg",
-          ].map((src) => (
-            <div
-              key={src}
-              className="aspect-square overflow-hidden rounded-lg"
-              style={{ background: "var(--paper-alt)" }}
-            >
-              <Image
-                src={src}
-                alt=""
-                width={80}
-                height={80}
-                unoptimized
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    </Link>
   );
 }
 
