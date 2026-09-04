@@ -106,9 +106,9 @@ export default function MarketingHero({
           variants={rise}
           className="font-display text-[clamp(2.7rem,8.5vw,5rem)] leading-[1.03] text-[#f8f1e6]"
         >
-          Falling in love was easy.
+          Everyone gets a caption.
           <br />
-          This is too.
+          You get a website.
         </motion.h1>
         <motion.p
           variants={rise}

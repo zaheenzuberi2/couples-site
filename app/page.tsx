@@ -109,6 +109,53 @@ export default function Home() {
         </ol>
       </section>
 
+      {/* ----------------------------------------------------------- play */}
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-4xl px-6 py-24">
+          <div className="text-center">
+            <p className="text-xs tracking-[0.24em] text-accent uppercase">
+              Free, no page required
+            </p>
+            <h2 className="mt-3 font-display text-4xl">
+              Not ready for a whole page yet?
+            </h2>
+            <p className="mx-auto mt-5 max-w-lg leading-relaxed text-muted">
+              Make a bucket list or a &quot;how well do you know us&quot;
+              quiz in seconds. No sign-up, no account, just a title and a
+              link to send.
+            </p>
+          </div>
+
+          <div className="mt-14 grid gap-6 sm:grid-cols-2">
+            <div className="border border-line p-8">
+              <h3 className="font-display text-2xl">
+                How well do you know us?
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                Write a few questions, guests answer for fun, and a live
+                leaderboard shows who knows you best.
+              </p>
+            </div>
+            <div className="border border-line p-8">
+              <h3 className="font-display text-2xl">Our bucket list</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                Things you want to do together. Guests see your progress,
+                not a due date.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <Link
+              href="/play"
+              className="inline-block bg-accent px-8 py-3.5 text-xs tracking-[0.2em] text-white uppercase"
+            >
+              Try it free
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ------------------------------------------------------- pricing */}
       <section className="border-t border-line bg-card">
         <div className="mx-auto max-w-xl px-6 py-24 text-center">
