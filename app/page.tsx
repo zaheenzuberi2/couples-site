@@ -44,6 +44,21 @@ const GIFT_CARDS = [
   },
 ];
 
+const FAQ_ITEMS = [
+  {
+    q: "Is it really a one-time payment of PKR 3,999?",
+    a: "Yes! There are absolutely no hidden monthly subscriptions or renewal fees. You pay once, and your digital love story is hosted online forever.",
+  },
+  {
+    q: "Can I keep our website completely private?",
+    a: "Absolutely. By default, your page is accessible via a secure, unlisted link that only you and your partner know. You choose exactly when, or if, you want to share it with friends or social media.",
+  },
+  {
+    q: "How do I actually give this as a surprise gift?",
+    a: 'Most users build the timeline secretly using their favorite camera roll photos and inside jokes. Once it’s perfect, they text the custom link (like ours.love/yournames) to their partner at midnight on their anniversary or birthday!',
+  },
+];
+
 export default function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -77,6 +92,14 @@ export default function Home() {
           url: siteUrl(),
         },
       },
+      {
+        "@type": "FAQPage",
+        mainEntity: FAQ_ITEMS.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      },
     ],
   };
 
@@ -87,10 +110,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <MarketingHero
-        price={PRICE_LABEL}
-        exampleUrl={siteUrl().replace(/^https?:\/\//, "")}
-      />
+      <MarketingHero price={PRICE_LABEL} />
 
       {/* ---------------------------------------------------- perfect gift */}
       <section className="border-y border-line bg-card">
@@ -235,6 +255,36 @@ export default function Home() {
             Start, it&apos;s free to try
           </Link>
         </Reveal>
+      </section>
+
+      {/* ------------------------------------------------------------ faq */}
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-2xl px-6 py-24">
+          <Reveal>
+            <h2 className="text-center font-display text-4xl sm:text-5xl">
+              Frequently Asked Questions
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.1} className="mt-14">
+            {FAQ_ITEMS.map((item) => (
+              <details key={item.q} className="group border-b border-line py-6 first:pt-0">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 font-display text-xl [&::-webkit-details-marker]:hidden">
+                  {item.q}
+                  <span
+                    aria-hidden
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-base text-accent transition-transform duration-300 group-open:rotate-45"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p className="mt-4 max-w-xl leading-relaxed text-muted">
+                  {item.a}
+                </p>
+              </details>
+            ))}
+          </Reveal>
+        </div>
       </section>
 
       <footer className="border-t border-line px-6 py-10 text-center text-sm text-muted">
