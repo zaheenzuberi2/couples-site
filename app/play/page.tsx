@@ -45,6 +45,18 @@ export default function PlayLandingPage() {
           See Ours
         </Link>
       </p>
+
+      <div
+        className="mt-4 flex justify-center gap-4 text-xs"
+        style={{ color: PLAY_COLORS.inkSoft }}
+      >
+        <Link href="/privacy" className="underline underline-offset-4">
+          Privacy
+        </Link>
+        <Link href="/terms" className="underline underline-offset-4">
+          Terms
+        </Link>
+      </div>
     </main>
   );
 }

@@ -157,7 +157,7 @@ export default function Home() {
       </section>
 
       {/* ------------------------------------------------------- pricing */}
-      <section className="border-t border-line bg-card">
+      <section id="pricing" className="border-t border-line bg-card">
         <div className="mx-auto max-w-xl px-6 py-24 text-center">
           <p className="text-xs tracking-[0.28em] text-muted uppercase">
             One price
@@ -200,6 +200,14 @@ export default function Home() {
         <Link href="/play" className="underline underline-offset-4 hover:text-accent">
           Free bucket list &amp; quiz
         </Link>
+        <div className="mt-4 flex justify-center gap-4 text-xs">
+          <Link href="/privacy" className="underline underline-offset-4 hover:text-accent">
+            Privacy
+          </Link>
+          <Link href="/terms" className="underline underline-offset-4 hover:text-accent">
+            Terms
+          </Link>
+        </div>
       </footer>
     </div>
   );

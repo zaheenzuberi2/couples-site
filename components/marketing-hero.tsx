@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { BrandMark } from "@/components/brand-mark";
+import { AnimatedBrandMark } from "@/components/animated-brand-mark";
 import { BRAND } from "@/lib/env";
 
 /**
@@ -86,8 +86,31 @@ export default function MarketingHero({
       )}
 
       <header className="pt-safe relative z-10 mx-auto flex w-full max-w-5xl items-center gap-2.5 px-6 py-6">
-        <BrandMark size={22} color="#e8c98a" />
-        <span className="font-display text-2xl text-[#f5ece0]">{BRAND}</span>
+        <AnimatedBrandMark size={22} color="#e8c98a" />
+        <motion.span
+          initial={reduceMotion ? false : { opacity: 0, x: -6 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: reduceMotion ? 0 : 0.75 }}
+          className="font-display text-2xl text-[#f5ece0]"
+        >
+          {BRAND}
+        </motion.span>
+
+        <nav className="ml-8 hidden items-center gap-6 text-sm text-[#cbb8a3] sm:flex">
+          <a href="#how" className="transition-colors hover:text-[#e8c98a]">
+            How it works
+          </a>
+          <a
+            href="#pricing"
+            className="transition-colors hover:text-[#e8c98a]"
+          >
+            Pricing
+          </a>
+          <Link href="/play" className="transition-colors hover:text-[#e8c98a]">
+            Play
+          </Link>
+        </nav>
+
         <Link
           href="/login"
           className="ml-auto text-sm text-[#cbb8a3] underline underline-offset-4 transition-colors hover:text-[#e8c98a]"
