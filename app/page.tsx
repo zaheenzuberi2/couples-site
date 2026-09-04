@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing-hero";
+import { LogoPreloader } from "@/components/logo-preloader";
 import { Reveal } from "@/components/reveal";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { PLAY_COLORS } from "@/components/play/ui";
@@ -111,6 +112,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <LogoPreloader />
       <MarketingHero price={PRICE_LABEL} />
 
       {/* ---------------------------------------------------- perfect gift */}
@@ -194,16 +196,26 @@ export default function Home() {
               Not ready for a whole page yet?
             </h2>
             <p className="mx-auto mt-5 max-w-md leading-relaxed text-muted lg:mx-0">
-              Make a bucket list or a &quot;how well do you know us&quot;
-              quiz, completely free, with no sign-up and no account. Just a
-              title, and you&apos;ve got a link to send.
+              Make a bucket list, a &quot;how well do you know us&quot; quiz,
+              or play &quot;Who&apos;s More Likely?&quot; - completely free,
+              with no sign-up and no account. Just a title, and you&apos;ve
+              got a link to send.
             </p>
-            <Link
-              href="/play"
-              className="mt-8 inline-block bg-accent px-8 py-3.5 text-xs font-medium tracking-[0.2em] text-white uppercase shadow-[0_8px_24px_-8px_rgba(156,63,91,0.4)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-10px_rgba(156,63,91,0.55)] active:translate-y-0"
-            >
-              Try it free
-            </Link>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+              <Link
+                href="/play"
+                className="inline-block bg-accent px-8 py-3.5 text-xs font-medium tracking-[0.2em] text-white uppercase shadow-[0_8px_24px_-8px_rgba(156,63,91,0.4)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-10px_rgba(156,63,91,0.55)] active:translate-y-0"
+              >
+                Try it free
+              </Link>
+              <Link
+                href="/play/game"
+                prefetch={false}
+                className="text-xs font-medium tracking-[0.2em] text-accent uppercase underline underline-offset-4"
+              >
+                Play the game →
+              </Link>
+            </div>
           </Reveal>
 
           <Reveal delay={0.15} className="order-1 lg:order-2">
@@ -283,7 +295,7 @@ export default function Home() {
         Websites for couples
         <span className="mx-2">·</span>
         <Link href="/play" prefetch={false} className="underline underline-offset-4 hover:text-accent">
-          Free bucket list &amp; quiz
+          Free bucket list, quiz &amp; couple game
         </Link>
         <div className="mt-4 flex justify-center gap-4 text-xs">
           <Link href="/privacy" prefetch={false} className="underline underline-offset-4 hover:text-accent">
@@ -380,6 +392,21 @@ function PlayPreviewCard() {
       >
         <p className="text-sm font-semibold" style={{ color: PLAY_COLORS.ink }}>
           Where was our first trip?
+        </p>
+      </div>
+
+      <p
+        className="mt-6 text-xs font-bold tracking-wide uppercase"
+        style={{ color: "#c9930f" }}
+      >
+        Couple game
+      </p>
+      <div
+        className="mt-3 rounded-2xl px-3.5 py-3"
+        style={{ background: PLAY_COLORS.yellowSoft }}
+      >
+        <p className="text-sm font-semibold" style={{ color: PLAY_COLORS.ink }}>
+          Who&apos;s more likely to get angry first? 🎲
         </p>
       </div>
     </div>
