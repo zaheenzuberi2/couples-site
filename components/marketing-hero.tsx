@@ -245,7 +245,7 @@ function HeroPhoneMockup() {
               className="truncate text-[10px] tracking-wide"
               style={{ color: "var(--whisper)" }}
             >
-              ours.love/zara-and-ayesha
+              ours.love/zara-and-alina
             </span>
           </div>
 
@@ -268,7 +268,7 @@ function HeroPhoneMockup() {
             <span className="italic" style={{ color: "var(--gilt)" }}>
               &amp;
             </span>{" "}
-            Ayesha
+            Alina
           </p>
 
           {/* Days-together counter */}

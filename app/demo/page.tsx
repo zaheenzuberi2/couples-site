@@ -31,7 +31,7 @@ const demoBundle: SiteBundle = {
     is_paid: true,
     is_published: true,
     partner_one: "Zara",
-    partner_two: "Ayesha",
+    partner_two: "Alina",
     tagline: "Two names, one story, ours to keep.",
     story:
       "We didn't plan any of this. A shared table at a friend's dinner, then a conversation that ran three hours too long.\n\nSince then it's been ordinary days that turned out to matter - the long drives, the bad jokes, the quiet nights we still remember better than the big ones.\n\nThis page is where we're keeping it, so we never have to explain it from memory again.",
@@ -63,7 +63,7 @@ const demoBundle: SiteBundle = {
       id: "demo-photo-2",
       site_id: "demo",
       image_path: "/demo/photo-2.svg",
-      caption: "Ayesha",
+      caption: "Alina",
       sort_order: 1,
       created_at: "2026-01-01T00:00:00.000Z",
     },

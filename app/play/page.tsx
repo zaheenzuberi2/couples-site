@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CreateRoomForm from "@/components/play/create-room-form";
+import { PlayMenu } from "@/components/play/play-menu";
 import { PLAY_COLORS } from "@/components/play/ui";
 import { siteUrl } from "@/lib/env";
 
@@ -36,6 +37,10 @@ export default function PlayLandingPage() {
       </p>
 
       <div className="mt-10 w-full">
+        <PlayMenu />
+      </div>
+
+      <div id="create" className="mt-10 w-full scroll-mt-8">
         <CreateRoomForm />
       </div>
 

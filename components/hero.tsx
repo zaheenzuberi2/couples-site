@@ -44,7 +44,7 @@ export default function Hero({
   };
 
   return (
-    <section className="pt-safe relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 py-28">
+    <section className="pt-safe relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 py-16 sm:py-24 lg:py-28">
       {hasPhoto ? (
         <>
           <motion.div
@@ -119,7 +119,7 @@ export default function Hero({
         {site.tagline.trim() && (
           <motion.p
             variants={rise}
-            className="mx-auto mt-7 max-w-lg text-base leading-relaxed sm:text-lg"
+            className="mx-auto mt-4 max-w-lg text-base leading-relaxed sm:mt-7 sm:text-lg"
             style={{
               color: hasPhoto ? "rgba(255,255,255,0.88)" : "var(--whisper)",
             }}
@@ -129,7 +129,7 @@ export default function Hero({
         )}
 
         {site.event_date && (
-          <motion.div variants={rise} className="mt-10">
+          <motion.div variants={rise} className="mt-6 sm:mt-10">
             <div
               className="rule-diamond mx-auto max-w-xs"
               style={hasPhoto ? { color: "rgba(255,255,255,0.45)" } : undefined}
