@@ -45,7 +45,8 @@ export default function LoginForm() {
         <p className="font-display text-2xl">Check your email</p>
         <p className="mt-2 text-sm leading-relaxed text-muted">
           We sent a sign-in link to <span className="text-foreground">{sent}</span>.
-          It expires in an hour.
+          It expires in an hour. Don&apos;t see it? Check your spam or
+          junk folder too.
         </p>
         <button
           onClick={() => setSent(null)}
