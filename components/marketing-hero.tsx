@@ -20,18 +20,18 @@ export default function MarketingHero({ price }: { price: string }) {
     hidden: {},
     show: {
       transition: {
-        staggerChildren: reduceMotion ? 0 : 0.12,
-        delayChildren: reduceMotion ? 0 : 0.1,
+        staggerChildren: reduceMotion ? 0 : 0.08,
+        delayChildren: reduceMotion ? 0 : 0.05,
       },
     },
   };
   const rise = {
-    hidden: { opacity: 0, y: reduceMotion ? 0 : 16 },
+    hidden: { opacity: 0, y: reduceMotion ? 0 : 14 },
     show: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: reduceMotion ? 0 : 0.85,
+        duration: reduceMotion ? 0 : 0.6,
         ease: [0.16, 1, 0.3, 1] as const,
       },
     },
@@ -40,54 +40,49 @@ export default function MarketingHero({ price }: { price: string }) {
   return (
     <div className="relative overflow-hidden bg-[#160f14]">
       {/* Three soft, slowly drifting glow fields - gold, blush, deep plum.
-          Blur does the work; nothing here is a hard-edged shape. */}
-      {!reduceMotion && (
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <motion.div
-            className="absolute h-[34rem] w-[34rem] rounded-full"
-            style={{
-              left: "8%",
-              top: "-8%",
-              background:
-                "radial-gradient(circle, rgba(201,168,106,0.38) 0%, rgba(201,168,106,0) 70%)",
-              filter: "blur(60px)",
-            }}
-            animate={{ x: [0, 40, -10, 0], y: [0, 25, 10, 0] }}
-            transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute h-[30rem] w-[30rem] rounded-full"
-            style={{
-              right: "4%",
-              top: "8%",
-              background:
-                "radial-gradient(circle, rgba(224,165,184,0.32) 0%, rgba(224,165,184,0) 70%)",
-              filter: "blur(60px)",
-            }}
-            animate={{ x: [0, -35, 15, 0], y: [0, 30, -15, 0] }}
-            transition={{ duration: 31, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute h-[36rem] w-[36rem] rounded-full"
-            style={{
-              left: "28%",
-              bottom: "-18%",
-              background:
-                "radial-gradient(circle, rgba(139,58,90,0.4) 0%, rgba(139,58,90,0) 70%)",
-              filter: "blur(70px)",
-            }}
-            animate={{ x: [0, 25, -25, 0], y: [0, -15, 10, 0] }}
-            transition={{ duration: 34, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </div>
-      )}
+          Blur does the work; nothing here is a hard-edged shape. Plain CSS
+          keyframes (not Framer Motion) - the compositor runs these for
+          free instead of ticking a JS animation loop for as long as the
+          hero is mounted. prefers-reduced-motion is handled globally. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div
+          className="animate-drift-a absolute h-[34rem] w-[34rem] rounded-full"
+          style={{
+            left: "8%",
+            top: "-8%",
+            background:
+              "radial-gradient(circle, rgba(201,168,106,0.38) 0%, rgba(201,168,106,0) 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+        <div
+          className="animate-drift-b absolute h-[30rem] w-[30rem] rounded-full"
+          style={{
+            right: "4%",
+            top: "8%",
+            background:
+              "radial-gradient(circle, rgba(224,165,184,0.32) 0%, rgba(224,165,184,0) 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+        <div
+          className="animate-drift-c absolute h-[36rem] w-[36rem] rounded-full"
+          style={{
+            left: "28%",
+            bottom: "-18%",
+            background:
+              "radial-gradient(circle, rgba(139,58,90,0.4) 0%, rgba(139,58,90,0) 70%)",
+            filter: "blur(70px)",
+          }}
+        />
+      </div>
 
       <header className="pt-safe relative z-10 mx-auto flex w-full max-w-5xl items-center gap-2.5 px-6 py-6">
         <AnimatedBrandMark size={22} color="#e8c98a" />
         <motion.span
           initial={reduceMotion ? false : { opacity: 0, x: -6 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: reduceMotion ? 0 : 0.75 }}
+          transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.5 }}
           className="font-display text-2xl text-[#f5ece0]"
         >
           {BRAND}
@@ -103,13 +98,18 @@ export default function MarketingHero({ price }: { price: string }) {
           >
             Pricing
           </a>
-          <Link href="/play" className="transition-colors hover:text-[#e8c98a]">
+          <Link
+            href="/play"
+            prefetch={false}
+            className="transition-colors hover:text-[#e8c98a]"
+          >
             Free Date Tools
           </Link>
         </nav>
 
         <Link
           href="/login"
+          prefetch={false}
           className="ml-auto text-sm text-[#cbb8a3] underline underline-offset-4 transition-colors hover:text-[#e8c98a]"
         >
           Sign in

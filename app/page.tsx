@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import MarketingHero from "@/components/marketing-hero";
 import { Reveal } from "@/components/reveal";
+import { FaqAccordion } from "@/components/faq-accordion";
 import { PLAY_COLORS } from "@/components/play/ui";
 import { BrandMark } from "@/components/brand-mark";
 import { BRAND, PRICE_LABEL, siteUrl } from "@/lib/env";
@@ -176,6 +177,7 @@ export default function Home() {
             Not sure what that looks like?{" "}
             <Link
               href="/demo"
+              prefetch={false}
               className="text-accent underline underline-offset-4"
             >
               See an example
@@ -233,7 +235,7 @@ export default function Home() {
 
           <ul className="mx-auto mt-10 max-w-sm space-y-3 text-left text-sm">
             {[
-              `Your own premium custom web address (${siteUrl().replace(/^https?:\/\//, "")}/your-names)`,
+              "Your own premium custom web address (ours.love/your-names)",
               "Unlimited photo uploads, edits, and updates",
               "Fully mobile-responsive (looks like a native app on every phone)",
               "Live countdown widgets & interactive date bucket lists",
@@ -267,22 +269,7 @@ export default function Home() {
           </Reveal>
 
           <Reveal delay={0.1} className="mt-14">
-            {FAQ_ITEMS.map((item) => (
-              <details key={item.q} className="group border-b border-line py-6 first:pt-0">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 font-display text-xl [&::-webkit-details-marker]:hidden">
-                  {item.q}
-                  <span
-                    aria-hidden
-                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-base text-accent transition-transform duration-300 group-open:rotate-45"
-                  >
-                    +
-                  </span>
-                </summary>
-                <p className="mt-4 max-w-xl leading-relaxed text-muted">
-                  {item.a}
-                </p>
-              </details>
-            ))}
+            <FaqAccordion items={FAQ_ITEMS} />
           </Reveal>
         </div>
       </section>
@@ -295,14 +282,14 @@ export default function Home() {
         <span className="mx-2">·</span>
         Websites for couples
         <span className="mx-2">·</span>
-        <Link href="/play" className="underline underline-offset-4 hover:text-accent">
+        <Link href="/play" prefetch={false} className="underline underline-offset-4 hover:text-accent">
           Free bucket list &amp; quiz
         </Link>
         <div className="mt-4 flex justify-center gap-4 text-xs">
-          <Link href="/privacy" className="underline underline-offset-4 hover:text-accent">
+          <Link href="/privacy" prefetch={false} className="underline underline-offset-4 hover:text-accent">
             Privacy
           </Link>
-          <Link href="/terms" className="underline underline-offset-4 hover:text-accent">
+          <Link href="/terms" prefetch={false} className="underline underline-offset-4 hover:text-accent">
             Terms
           </Link>
         </div>

@@ -146,6 +146,56 @@ html {
   color: var(--paper);
 }
 
+/* Hero background glow drift - plain CSS instead of a JS-driven animation
+   loop, so the three blobs run on the compositor thread for as long as the
+   hero is mounted instead of costing a requestAnimationFrame tick each
+   forever. prefers-reduced-motion is handled by the blanket rule below. */
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(40px, 25px);
+  }
+  66% {
+    transform: translate(-10px, 10px);
+  }
+}
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-35px, 30px);
+  }
+  66% {
+    transform: translate(15px, -15px);
+  }
+}
+@keyframes drift-c {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(25px, -15px);
+  }
+  66% {
+    transform: translate(-25px, 10px);
+  }
+}
+.animate-drift-a {
+  animation: drift-a 26s ease-in-out infinite;
+}
+.animate-drift-b {
+  animation: drift-b 31s ease-in-out infinite;
+}
+.animate-drift-c {
+  animation: drift-c 34s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

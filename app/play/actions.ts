@@ -72,7 +72,10 @@ export async function createRoom(
     return { ok: false, message: "Could not create that. Try again." };
   }
 
-  redirect(`/play/edit/${room.edit_token}`);
+  // ?new=1 tells the edit page to show the gift-page upsell modal once -
+  // the one moment right after generating a free link, before they've
+  // navigated anywhere else.
+  redirect(`/play/edit/${room.edit_token}?new=1`);
 }
 
 /* --------------------------------------------------------- bucket list */

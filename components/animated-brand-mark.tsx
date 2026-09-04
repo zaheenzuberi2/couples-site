@@ -22,7 +22,7 @@ export function AnimatedBrandMark({
     initial: reduceMotion ? false : { pathLength: 0, opacity: 0 },
     animate: { pathLength: 1, opacity: 1 },
     transition: {
-      duration: reduceMotion ? 0 : 0.85,
+      duration: reduceMotion ? 0 : 0.6,
       delay: reduceMotion ? 0 : delay,
       ease: [0.16, 1, 0.3, 1] as const,
     },
@@ -46,7 +46,7 @@ export function AnimatedBrandMark({
         fill="none"
         stroke={color}
         strokeWidth="4"
-        {...ring(0.4)}
+        {...ring(0.25)}
       />
     </svg>
   );
