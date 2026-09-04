@@ -107,6 +107,13 @@ export default function Home() {
             body="You get a private link straight away. Pay when you want the public address."
           />
         </ol>
+
+        <p className="mt-14 text-center text-sm text-muted">
+          Not sure what that looks like?{" "}
+          <Link href="/demo" className="text-accent underline underline-offset-4">
+            See an example
+          </Link>
+        </p>
       </section>
 
       {/* ----------------------------------------------------------- play */}
