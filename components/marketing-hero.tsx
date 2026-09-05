@@ -1,10 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { AnimatedBrandMark } from "@/components/animated-brand-mark";
 import { BrandMark } from "@/components/brand-mark";
 import { BRAND } from "@/lib/env";
+
+const NAV_LINKS = [
+  { href: "#how", label: "How it works" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "/play", label: "Free Date Tools", prefetch: false },
+] as const;
 
 /**
  * The product's own front door. Deliberately a different register from the
@@ -15,6 +22,30 @@ import { BRAND } from "@/lib/env";
  */
 export default function MarketingHero({ price }: { price: string }) {
   const reduceMotion = useReducedMotion();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Mobile browsers can restore a scroll position from bfcache or a prior
+  // visit's scroll state, landing the very first paint mid-page instead of
+  // on the hero. Opting out of automatic restoration and forcing the top on
+  // mount makes this page always open exactly where it should.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+    return () => {
+      window.history.scrollRestoration = previous;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   const container = {
     hidden: {},
@@ -77,7 +108,7 @@ export default function MarketingHero({ price }: { price: string }) {
         />
       </div>
 
-      <header className="pt-safe relative z-10 mx-auto flex w-full max-w-5xl items-center gap-2.5 px-6 py-6">
+      <header className="pt-safe relative z-20 mx-auto flex w-full max-w-5xl items-center gap-2.5 px-6 py-6">
         <AnimatedBrandMark size={22} color="#e8c98a" />
         <motion.span
           initial={reduceMotion ? false : { opacity: 0, x: -6 }}
@@ -89,32 +120,118 @@ export default function MarketingHero({ price }: { price: string }) {
         </motion.span>
 
         <nav className="ml-8 hidden items-center gap-6 text-sm text-[#cbb8a3] sm:flex">
-          <a href="#how" className="transition-colors hover:text-[#e8c98a]">
-            How it works
-          </a>
-          <a
-            href="#pricing"
-            className="transition-colors hover:text-[#e8c98a]"
-          >
-            Pricing
-          </a>
-          <Link
-            href="/play"
-            prefetch={false}
-            className="transition-colors hover:text-[#e8c98a]"
-          >
-            Free Date Tools
-          </Link>
+          {NAV_LINKS.map((link) =>
+            link.href.startsWith("#") ? (
+              <a
+                key={link.href}
+                href={link.href}
+                className="transition-colors hover:text-[#e8c98a]"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                prefetch={"prefetch" in link ? link.prefetch : undefined}
+                className="transition-colors hover:text-[#e8c98a]"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </nav>
 
         <Link
           href="/login"
           prefetch={false}
-          className="ml-auto text-sm text-[#cbb8a3] underline underline-offset-4 transition-colors hover:text-[#e8c98a]"
+          className="ml-auto hidden text-sm text-[#cbb8a3] underline underline-offset-4 transition-colors hover:text-[#e8c98a] sm:inline-block"
         >
           Sign in
         </Link>
+
+        {/* Mobile-only menu toggle - the nav links and Sign in above are
+            sm:hidden, so this is the only way to reach them under that
+            breakpoint. A 44px hit area even though the icon itself is
+            smaller (Apple HIG / Material touch-target minimum). */}
+        <button
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav-panel"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          className="ml-auto flex h-11 w-11 items-center justify-center text-[#f5ece0] sm:hidden"
+        >
+          <span className="relative block h-4 w-5">
+            <motion.span
+              aria-hidden
+              className="absolute left-0 top-0 h-0.5 w-5 rounded-full bg-current"
+              animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 7 : 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.25 }}
+            />
+            <motion.span
+              aria-hidden
+              className="absolute left-0 top-1/2 h-0.5 w-5 -translate-y-1/2 rounded-full bg-current"
+              animate={{ opacity: menuOpen ? 0 : 1 }}
+              transition={{ duration: reduceMotion ? 0 : 0.15 }}
+            />
+            <motion.span
+              aria-hidden
+              className="absolute bottom-0 left-0 h-0.5 w-5 rounded-full bg-current"
+              animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -7 : 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.25 }}
+            />
+          </span>
+        </button>
       </header>
+
+      <div className="relative z-20 mx-auto w-full max-w-5xl px-6 sm:hidden">
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              id="mobile-nav-panel"
+              initial={reduceMotion ? false : { opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.25, ease: [0.16, 1, 0.3, 1] as const }}
+              className="-mt-2 mb-4 overflow-hidden rounded-2xl border border-[#3a2f28] bg-[#1c1414]/95 backdrop-blur"
+            >
+              <nav className="flex flex-col divide-y divide-[#3a2f28]">
+                {NAV_LINKS.map((link) =>
+                  link.href.startsWith("#") ? (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="px-5 py-4 text-base text-[#e8ddcf] transition-colors hover:text-[#e8c98a]"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      prefetch={"prefetch" in link ? link.prefetch : undefined}
+                      onClick={() => setMenuOpen(false)}
+                      className="px-5 py-4 text-base text-[#e8ddcf] transition-colors hover:text-[#e8c98a]"
+                    >
+                      {link.label}
+                    </Link>
+                  )
+                )}
+                <Link
+                  href="/login"
+                  prefetch={false}
+                  onClick={() => setMenuOpen(false)}
+                  className="px-5 py-4 text-base font-medium text-[#e8c98a] transition-colors hover:text-[#f2d9a2]"
+                >
+                  Sign in
+                </Link>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <motion.section
         variants={container}
