@@ -57,7 +57,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How do I actually give this as a surprise gift?",
-    a: 'Most users build the timeline secretly using their favorite camera roll photos and inside jokes. Once it’s perfect, they text the custom link (like ours.love/yournames) to their partner at midnight on their anniversary or birthday!',
+    a: 'Most users build the timeline secretly using their favorite camera roll photos and inside jokes. Once it’s perfect, they text the custom link (like ourslove.site/yournames) to their partner at midnight on their anniversary or birthday!',
   },
 ];
 
@@ -258,7 +258,7 @@ export default function Home() {
 
           <ul className="mx-auto mt-10 max-w-sm space-y-3 text-left text-sm">
             {[
-              "Your own premium custom web address (ours.love/your-names)",
+              "Your own premium custom web address (ourslove.site/your-names)",
               "Unlimited photo uploads, edits, and updates",
               "Fully mobile-responsive (looks like a native app on every phone)",
               "Live countdown widgets & interactive date bucket lists",

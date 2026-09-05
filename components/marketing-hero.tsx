@@ -362,7 +362,7 @@ function HeroPhoneMockup() {
               className="truncate text-[10px] tracking-wide"
               style={{ color: "var(--whisper)" }}
             >
-              ours.love/zara-and-alina
+              ourslove.site/zara-and-alina
             </span>
           </div>
 
