@@ -34,7 +34,7 @@ export default function PrivacyPage() {
             <Link href="/play" className="underline underline-offset-4">
               /play
             </Link>
-            , no account is required - we only store what you type into it
+            , no account is required. We only store what you type into it
             (the title, list items, quiz questions) and, if a guest plays
             your quiz, the name and score they enter.
           </p>
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
             Your data (account, website content, photos, and payment
             screenshots) is stored with Supabase, our database and file
             storage provider. Your website is only publicly reachable once
-            it&apos;s paid for and published - until then it sits behind a
+            it&apos;s paid for and published. Until then it sits behind a
             private, unguessable link that only you have.
           </p>
         </Section>
@@ -62,7 +62,7 @@ export default function PrivacyPage() {
         <Section title="Cookies">
           <p>
             We use a single session cookie to keep you signed in. That&apos;s
-            it - no advertising cookies, no third-party trackers, no
+            it: no advertising cookies, no third-party trackers, no
             analytics pixels that follow you elsewhere.
           </p>
         </Section>

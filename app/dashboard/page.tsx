@@ -98,7 +98,7 @@ export default async function DashboardPage({
               >
                 Make one for free
               </Link>{" "}
-              — no website needed.
+              and skip the website entirely.
             </p>
           </>
         )}

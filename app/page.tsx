@@ -14,9 +14,9 @@ import { BRAND, PRICE_LABEL, siteUrl } from "@/lib/env";
 // catchy hero headline stays catchy (it's for humans); this is what
 // search engines read instead.
 export const metadata: Metadata = {
-  title: `${BRAND} - Build a Free Website for Couples`,
+  title: `${BRAND} · Build a Free Website for Couples`,
   description:
-    "Make a beautiful website for the two of you in minutes. Add your photos, your story and your dates - a couple website builder for anniversaries, relationship reveals, and keepsake websites. Free to build.",
+    "Make a beautiful website for the two of you in minutes. Add your photos, your story and your dates. A couple website builder for anniversaries, relationship reveals, and keepsake websites. Free to build.",
   alternates: { canonical: siteUrl() },
 };
 
@@ -77,7 +77,7 @@ export default function Home() {
         name: BRAND,
         url: siteUrl(),
         description:
-          "A website builder for couples - photos, your story, and your dates, turned into a website you can share.",
+          "A website builder for couples: photos, your story, and your dates, turned into a website you can share.",
         publisher: { "@id": `${siteUrl()}/#organization` },
       },
       {
@@ -197,7 +197,7 @@ export default function Home() {
             </h2>
             <p className="mx-auto mt-5 max-w-md leading-relaxed text-muted lg:mx-0">
               Make a bucket list, a &quot;how well do you know us&quot; quiz,
-              or play &quot;Who&apos;s More Likely?&quot; - completely free,
+              or play &quot;Who&apos;s More Likely?&quot;. All completely free,
               with no sign-up and no account. Just a title, and you&apos;ve
               got a link to send.
             </p>

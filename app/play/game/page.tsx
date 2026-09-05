@@ -7,7 +7,7 @@ import { siteUrl } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Who's More Likely? A Free Couple Game",
   description:
-    "20 quick 'who's more likely' questions for couples - who gets angry first, who loves more, and more. Free, no sign-up.",
+    "20 quick 'who's more likely' questions for couples: who gets angry first, who loves more, and more. Free, no sign-up.",
   alternates: { canonical: `${siteUrl()}/play/game` },
 };
 

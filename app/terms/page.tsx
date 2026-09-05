@@ -26,7 +26,7 @@ export default function TermsPage() {
             {BRAND} lets you build a website for the two of you: your photos,
             your story and your dates, on your own web address. Building a
             website is free. Your website is only reachable at its public address
-            once you&apos;ve paid {PRICE_LABEL} and published it - until
+            once you&apos;ve paid {PRICE_LABEL} and published it. Until
             then it lives at a private preview link only you have.
           </p>
         </Section>
@@ -35,7 +35,7 @@ export default function TermsPage() {
           <p>
             Payment is a one-time {PRICE_LABEL} fee, made by bank transfer.
             You upload a screenshot of the transfer, we confirm it by hand
-            and unlock publishing - usually within a day. There&apos;s no
+            and unlock publishing, usually within a day. There&apos;s no
             subscription and no recurring charge.
           </p>
         </Section>
@@ -45,7 +45,7 @@ export default function TermsPage() {
             If your payment hasn&apos;t been confirmed yet, email us and
             we&apos;ll refund it, no questions asked. Once your website is
             published, the fee covers the work already done and isn&apos;t
-            refundable - but if something&apos;s actually wrong on our end,
+            refundable, but if something&apos;s actually wrong on our end,
             email us and we&apos;ll make it right.
           </p>
         </Section>
@@ -53,7 +53,7 @@ export default function TermsPage() {
         <Section title="Your content">
           <p>
             Your photos and words stay yours. Uploading them to {BRAND}{" "}
-            doesn&apos;t transfer ownership to us - we host them so your
+            doesn&apos;t transfer ownership to us. We host them so your
             website can display them, nothing more. Don&apos;t upload anything
             you don&apos;t have the right to share, or anything illegal,
             harassing, or intended to impersonate someone without consent.
@@ -69,7 +69,7 @@ export default function TermsPage() {
             </Link>{" "}
             are free, with no account and no purchase required. Because
             there&apos;s no login, the edit link is the only way to recover
-            a room - if it&apos;s lost, we can&apos;t recover it for you.
+            a room. If it&apos;s lost, we can&apos;t recover it for you.
           </p>
         </Section>
 

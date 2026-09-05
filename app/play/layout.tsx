@@ -17,7 +17,7 @@ const display = Baloo_2({
 });
 
 export const metadata: Metadata = {
-  title: { default: `Free bucket list & quiz - ${BRAND}`, template: `%s · ${BRAND} Play` },
+  title: { default: `Free bucket list & quiz · ${BRAND}`, template: `%s · ${BRAND} Play` },
   description:
     "Make a shareable bucket list or a 'how well do you know us' quiz in seconds. No account, no website required.",
 };

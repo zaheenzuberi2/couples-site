@@ -34,7 +34,7 @@ const demoBundle: SiteBundle = {
     partner_two: "Alina",
     tagline: "Two names, one story, ours to keep.",
     story:
-      "We didn't plan any of this. A shared table at a friend's dinner, then a conversation that ran three hours too long.\n\nSince then it's been ordinary days that turned out to matter - the long drives, the bad jokes, the quiet nights we still remember better than the big ones.\n\nThis website is where we're keeping it, so we never have to explain it from memory again.",
+      "We didn't plan any of this. A shared table at a friend's dinner, then a conversation that ran three hours too long.\n\nSince then it's been ordinary days that turned out to matter: the long drives, the bad jokes, the quiet nights we still remember better than the big ones.\n\nThis website is where we're keeping it, so we never have to explain it from memory again.",
     event_date: "2026-12-24",
     // No hero_photo set - CouplePage promotes photos[0] to the hero
     // automatically, same as it would for a real couple who hasn't set one.
@@ -98,7 +98,7 @@ const demoBundle: SiteBundle = {
       site_id: "demo",
       title: "The first trip",
       happened_on: "2024-03-02",
-      body: "Four days, one bad map, and the realisation we travel well together - which, it turns out, is rarer than it sounds.",
+      body: "Four days, one bad map, and the realisation we travel well together, which turns out to be rarer than it sounds.",
       sort_order: 1,
     },
     {
@@ -120,7 +120,7 @@ export default function DemoPage() {
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3 text-sm">
           <span className="font-medium">Example website</span>
           <span className="text-muted">
-            Sample names and story - this is what yours could look like.
+            Sample names and story, so you can see what yours could look like.
           </span>
           <Link
             href="/login"

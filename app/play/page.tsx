@@ -8,7 +8,7 @@ import { siteUrl } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Free Couple Bucket List & “How Well Do You Know Us” Quiz Maker",
   description:
-    "Make a shared bucket list or a how-well-do-you-know-us quiz for you and your partner. No sign-up, no account - just a title and a link to share.",
+    "Make a shared bucket list or a how-well-do-you-know-us quiz for you and your partner. No sign-up, no account. Just a title and a link to share.",
   alternates: { canonical: `${siteUrl()}/play` },
 };
 

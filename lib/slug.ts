@@ -62,9 +62,9 @@ export type SlugCheck = { ok: true } | { ok: false; reason: string };
 export function validateSlug(slug: string): SlugCheck {
   if (!slug) return { ok: false, reason: "Pick a web address for your website." };
   if (slug.length < 3)
-    return { ok: false, reason: "That is too short - use at least 3 characters." };
+    return { ok: false, reason: "That is too short. Use at least 3 characters." };
   if (slug.length > 60)
-    return { ok: false, reason: "That is too long - keep it under 60 characters." };
+    return { ok: false, reason: "That is too long. Keep it under 60 characters." };
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug))
     return {
       ok: false,
