@@ -21,7 +21,7 @@ export default function LoginForm() {
       options: {
         // window.origin keeps this correct on localhost, preview and production
         // without another env var to forget.
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        emailRedirectTo: `${window.location.origin}/auth/confirm?next=/dashboard`,
       },
     });
 
