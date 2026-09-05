@@ -10,7 +10,7 @@ import { BRAND } from "@/lib/env";
 const NAV_LINKS = [
   { href: "#how", label: "How it works" },
   { href: "#pricing", label: "Pricing" },
-  { href: "/play", label: "Free Date Tools", prefetch: false },
+  { href: "/play", label: "Free Games & Quizzes", prefetch: false },
 ] as const;
 
 /**
