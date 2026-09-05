@@ -20,7 +20,7 @@ export default function TimelineEditor({
     >
       {entries.length === 0 && (
         <p className="mb-6 border border-dashed border-line px-5 py-8 text-center text-sm text-muted">
-          Nothing here yet. This section stays hidden on your page until you add
+          Nothing here yet. This section stays hidden on your website until you add
           a moment.
         </p>
       )}

@@ -60,7 +60,7 @@ export function suggestSlug(partnerOne: string, partnerTwo: string): string {
 export type SlugCheck = { ok: true } | { ok: false; reason: string };
 
 export function validateSlug(slug: string): SlugCheck {
-  if (!slug) return { ok: false, reason: "Pick a web address for your page." };
+  if (!slug) return { ok: false, reason: "Pick a web address for your website." };
   if (slug.length < 3)
     return { ok: false, reason: "That is too short - use at least 3 characters." };
   if (slug.length > 60)

@@ -12,7 +12,7 @@ import type { SiteBundle } from "@/lib/types";
  */
 export const metadata: Metadata = {
   title: "See an example",
-  description: "A sample page, built with Ours.",
+  description: "A sample website, built with Ours.",
   robots: { index: false, follow: false },
 };
 
@@ -34,7 +34,7 @@ const demoBundle: SiteBundle = {
     partner_two: "Alina",
     tagline: "Two names, one story, ours to keep.",
     story:
-      "We didn't plan any of this. A shared table at a friend's dinner, then a conversation that ran three hours too long.\n\nSince then it's been ordinary days that turned out to matter - the long drives, the bad jokes, the quiet nights we still remember better than the big ones.\n\nThis page is where we're keeping it, so we never have to explain it from memory again.",
+      "We didn't plan any of this. A shared table at a friend's dinner, then a conversation that ran three hours too long.\n\nSince then it's been ordinary days that turned out to matter - the long drives, the bad jokes, the quiet nights we still remember better than the big ones.\n\nThis website is where we're keeping it, so we never have to explain it from memory again.",
     event_date: "2026-12-24",
     // No hero_photo set - CouplePage promotes photos[0] to the hero
     // automatically, same as it would for a real couple who hasn't set one.
@@ -118,7 +118,7 @@ export default function DemoPage() {
       {/* Banner is outside [data-theme] so it never inherits the page's own palette. */}
       <div className="pt-safe sticky top-0 z-50 border-b border-line bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3 text-sm">
-          <span className="font-medium">Example page</span>
+          <span className="font-medium">Example website</span>
           <span className="text-muted">
             Sample names and story - this is what yours could look like.
           </span>

@@ -19,7 +19,7 @@ export default function CreateSiteForm() {
 
   return (
     <div className="mx-auto max-w-lg">
-      <h1 className="font-display text-4xl">Let&apos;s make your page</h1>
+      <h1 className="font-display text-4xl">Let&apos;s make your website</h1>
       <p className="mt-3 leading-relaxed text-muted">
         Two names and a web address is all we need to start. Photos, your
         story and the timeline come next, and nothing is final.
@@ -54,7 +54,7 @@ export default function CreateSiteForm() {
         <Field
           label="Your web address"
           htmlFor="slug_input"
-          hint="Lowercase letters, numbers and hyphens. You can change this until your page goes live."
+          hint="Lowercase letters, numbers and hyphens. You can change this until your website goes live."
         >
           <div className="flex items-center border border-line bg-card focus-within:border-accent">
             <span className="shrink-0 py-2.5 pl-3.5 text-base text-muted sm:text-sm">/</span>
@@ -78,7 +78,7 @@ export default function CreateSiteForm() {
         )}
 
         <button type="submit" disabled={pending} className={buttonClass}>
-          {pending ? "Creating…" : "Create my page"}
+          {pending ? "Creating…" : "Create my website"}
         </button>
       </form>
     </div>

@@ -152,7 +152,7 @@ export default function CoupleGame() {
                 className="rounded-full px-6 py-3 text-sm font-semibold text-white transition-transform active:scale-95"
                 style={{ background: PLAY_COLORS.coral }}
               >
-                Save This to a Gift Page
+                Save This to a Gift Website
               </Link>
             </div>
           </div>

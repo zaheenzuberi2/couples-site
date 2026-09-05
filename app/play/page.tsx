@@ -45,7 +45,7 @@ export default function PlayLandingPage() {
       </div>
 
       <p className="mt-8 text-xs" style={{ color: PLAY_COLORS.inkSoft }}>
-        Making a full page for the two of you instead?{" "}
+        Making a full website for the two of you instead?{" "}
         <Link href="/" className="underline underline-offset-4">
           See Ours
         </Link>

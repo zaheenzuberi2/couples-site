@@ -52,12 +52,12 @@ export default async function AdminPage() {
     <main className="mx-auto w-full max-w-5xl px-6 py-12">
       <h1 className="font-display text-4xl">Admin</h1>
       <p className="mt-2 text-sm text-muted">
-        {sites.length} page{sites.length === 1 ? "" : "s"} · {paidCount} paid
+        {sites.length} website{sites.length === 1 ? "" : "s"} · {paidCount} paid
       </p>
 
       {sites.length === 0 ? (
         <p className="mt-12 border border-dashed border-line px-6 py-12 text-center text-sm text-muted">
-          No one has made a page yet.
+          No one has made a website yet.
         </p>
       ) : (
         <div className="mt-10 overflow-x-auto">

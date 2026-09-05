@@ -16,7 +16,7 @@ import { BRAND, PRICE_LABEL, siteUrl } from "@/lib/env";
 export const metadata: Metadata = {
   title: `${BRAND} - Build a Free Website for Couples`,
   description:
-    "Make a beautiful website for the two of you in minutes. Add your photos, your story and your dates - a couple website builder for anniversaries, relationship reveals, and keepsake pages. Free to build.",
+    "Make a beautiful website for the two of you in minutes. Add your photos, your story and your dates - a couple website builder for anniversaries, relationship reveals, and keepsake websites. Free to build.",
   alternates: { canonical: siteUrl() },
 };
 
@@ -53,7 +53,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Can I keep our website completely private?",
-    a: "Absolutely. By default, your page is accessible via a secure, unlisted link that only you and your partner know. You choose exactly when, or if, you want to share it with friends or social media.",
+    a: "Absolutely. By default, your website is accessible via a secure, unlisted link that only you and your partner know. You choose exactly when, or if, you want to share it with friends or social media.",
   },
   {
     q: "How do I actually give this as a surprise gift?",
@@ -77,7 +77,7 @@ export default function Home() {
         name: BRAND,
         url: siteUrl(),
         description:
-          "A website builder for couples - photos, your story, and your dates, turned into a page you can share.",
+          "A website builder for couples - photos, your story, and your dates, turned into a website you can share.",
         publisher: { "@id": `${siteUrl()}/#organization` },
       },
       {
@@ -158,7 +158,7 @@ export default function Home() {
           <ol className="mt-16 grid gap-14 sm:grid-cols-3">
             <Step
               n="01"
-              title="Name Your Page"
+              title="Name Your Website"
               body="Enter your names and claim your custom web address in seconds."
             />
             <Step
@@ -193,7 +193,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-5xl gap-16 px-6 py-24 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-12">
           <Reveal className="order-2 text-center lg:order-1 lg:text-left">
             <h2 className="font-display text-4xl sm:text-5xl">
-              Not ready for a whole page yet?
+              Not ready for a whole website yet?
             </h2>
             <p className="mx-auto mt-5 max-w-md leading-relaxed text-muted lg:mx-0">
               Make a bucket list, a &quot;how well do you know us&quot; quiz,

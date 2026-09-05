@@ -34,7 +34,7 @@ export default function PublishPanel({
           className={`h-2 w-2 rounded-full ${live ? "bg-green-600" : "bg-amber-500"}`}
         />
         <h2 className="font-display text-2xl">
-          {live ? "Your page is live" : "Your page is private"}
+          {live ? "Your website is live" : "Your website is private"}
         </h2>
       </div>
 
@@ -102,7 +102,7 @@ export default function PublishPanel({
                   : "bg-accent px-6 py-3 text-xs tracking-[0.2em] text-white uppercase"
               }
             >
-              {site.is_published ? "Take it private again" : "Publish my page"}
+              {site.is_published ? "Take it private again" : "Publish my website"}
             </button>
             <span className="text-sm text-muted">
               {site.is_published

@@ -91,7 +91,7 @@ export async function createSite(
     if (error.code === "23505") {
       return { ok: false, message: "That web address was just taken." };
     }
-    return { ok: false, message: "Could not create your page. Try again." };
+    return { ok: false, message: "Could not create your website. Try again." };
   }
 
   refresh();
@@ -127,7 +127,7 @@ export async function saveDetails(
       return {
         ok: false,
         message:
-          "Your page is already live, so the web address is locked. Message us if you truly need it changed.",
+          "Your website is already live, so the web address is locked. Message us if you truly need it changed.",
       };
     }
     const check = validateSlug(requestedSlug);

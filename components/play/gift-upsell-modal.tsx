@@ -80,7 +80,7 @@ export function GiftUpsellModal() {
               className="mt-6 block rounded-full px-6 py-3.5 text-sm font-semibold text-white transition-transform active:scale-95"
               style={{ background: PLAY_COLORS.coral }}
             >
-              Create Free Gift Page Now
+              Create Free Gift Website Now
             </Link>
             <button
               type="button"

@@ -12,7 +12,7 @@ import { getMySite } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "Your page",
+  title: "Your website",
   robots: { index: false, follow: false },
 };
 
@@ -59,13 +59,13 @@ export default async function DashboardPage({
                 <h1 className="font-display text-4xl">
                   {bundle.site.partner_one} &amp; {bundle.site.partner_two}
                 </h1>
-                <p className="mt-1 text-sm text-muted">Keepsake page</p>
+                <p className="mt-1 text-sm text-muted">Keepsake website</p>
               </div>
               <a
                 href={`/preview/${bundle.site.preview_token}`}
                 className="ml-auto border border-line px-5 py-2.5 text-xs tracking-[0.18em] uppercase hover:border-accent hover:text-accent"
               >
-                View page
+                View website
               </a>
             </div>
 
@@ -98,7 +98,7 @@ export default async function DashboardPage({
               >
                 Make one for free
               </Link>{" "}
-              — no page needed.
+              — no website needed.
             </p>
           </>
         )}

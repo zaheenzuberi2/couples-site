@@ -50,7 +50,7 @@ export default function DetailsForm({ site }: { site: Site }) {
             hint={
               site.is_paid
                 ? "Locked, because your link may already be shared."
-                : "Locks once your page goes live."
+                : "Locks once your website goes live."
             }
           >
             <div className="flex items-center border border-line bg-card focus-within:border-accent">

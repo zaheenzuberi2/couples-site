@@ -20,7 +20,7 @@ export default function DeleteSiteButton({
       onSubmit={(e) => {
         if (
           !confirm(
-            `Permanently delete ${coupleName}'s page? Their photos, RSVPs and payment proof all go with it. This can't be undone.`
+            `Permanently delete ${coupleName}'s website? Their photos, RSVPs and payment proof all go with it. This can't be undone.`
           )
         ) {
           e.preventDefault();

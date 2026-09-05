@@ -23,7 +23,7 @@ export default function PrivacyPage() {
       <div className="mt-10 space-y-10 text-sm leading-relaxed text-muted">
         <Section title="What we collect">
           <p>
-            To build your page we collect what you give us directly: your
+            To build your website we collect what you give us directly: your
             names, your story, your photos, an event date if you add one,
             and your email address for signing in. If you pay by bank
             transfer, we also collect the payment screenshot and any note
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
 
         <Section title="How we use it">
           <p>
-            Solely to run the product: to render your page, to let you edit
+            Solely to run the product: to render your website, to let you edit
             it, to verify a manual payment, and to contact you about your
             own account if needed. We do not sell your information, and we
             do not use it for advertising or share it with data brokers.
@@ -51,9 +51,9 @@ export default function PrivacyPage() {
 
         <Section title="Where it's stored">
           <p>
-            Your data (account, page content, photos, and payment
+            Your data (account, website content, photos, and payment
             screenshots) is stored with Supabase, our database and file
-            storage provider. Your page is only publicly reachable once
+            storage provider. Your website is only publicly reachable once
             it&apos;s paid for and published - until then it sits behind a
             private, unguessable link that only you have.
           </p>

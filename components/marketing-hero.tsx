@@ -265,7 +265,7 @@ export default function MarketingHero({ price }: { price: string }) {
             href="/login"
             className="group relative bg-[#e8c98a] px-8 py-3.5 text-xs font-medium tracking-[0.2em] text-[#231419] uppercase shadow-[0_8px_24px_-8px_rgba(232,201,138,0.5)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#f2d9a2] hover:shadow-[0_14px_32px_-10px_rgba(232,201,138,0.65)] active:translate-y-0"
           >
-            Create Free Gift Page
+            Create Free Gift Website
           </Link>
           <Link
             href="/demo"

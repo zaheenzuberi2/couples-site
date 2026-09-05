@@ -99,7 +99,7 @@ export default function PaymentPanel({ site }: { site: Site }) {
               {submittedAt
                 ? `Sent ${formatDate(submittedAt)}. `
                 : ""}
-              We&apos;ll switch your page on once we&apos;ve checked it against the
+              We&apos;ll switch your website on once we&apos;ve checked it against the
               account, usually the same day.
             </p>
             <label
@@ -112,7 +112,7 @@ export default function PaymentPanel({ site }: { site: Site }) {
         ) : (
           <p className="text-sm text-muted">
             After you&apos;ve sent it, attach a screenshot of the transfer below
-            so we can match it to your page.
+            so we can match it to your website.
           </p>
         )}
 

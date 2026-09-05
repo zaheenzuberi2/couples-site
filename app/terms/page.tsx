@@ -23,9 +23,9 @@ export default function TermsPage() {
       <div className="mt-10 space-y-10 text-sm leading-relaxed text-muted">
         <Section title="The product">
           <p>
-            {BRAND} lets you build a page for the two of you: your photos,
+            {BRAND} lets you build a website for the two of you: your photos,
             your story and your dates, on your own web address. Building a
-            page is free. Your page is only reachable at its public address
+            website is free. Your website is only reachable at its public address
             once you&apos;ve paid {PRICE_LABEL} and published it - until
             then it lives at a private preview link only you have.
           </p>
@@ -43,7 +43,7 @@ export default function TermsPage() {
         <Section title="Refunds">
           <p>
             If your payment hasn&apos;t been confirmed yet, email us and
-            we&apos;ll refund it, no questions asked. Once your page is
+            we&apos;ll refund it, no questions asked. Once your website is
             published, the fee covers the work already done and isn&apos;t
             refundable - but if something&apos;s actually wrong on our end,
             email us and we&apos;ll make it right.
@@ -54,10 +54,10 @@ export default function TermsPage() {
           <p>
             Your photos and words stay yours. Uploading them to {BRAND}{" "}
             doesn&apos;t transfer ownership to us - we host them so your
-            page can display them, nothing more. Don&apos;t upload anything
+            website can display them, nothing more. Don&apos;t upload anything
             you don&apos;t have the right to share, or anything illegal,
             harassing, or intended to impersonate someone without consent.
-            We can take down content or suspend a page that violates this.
+            We can take down content or suspend a website that violates this.
           </p>
         </Section>
 
@@ -75,7 +75,7 @@ export default function TermsPage() {
 
         <Section title="Availability">
           <p>
-            We aim to keep pages up reliably, but we don&apos;t guarantee
+            We aim to keep websites up reliably, but we don&apos;t guarantee
             uninterrupted access and aren&apos;t liable for loss caused by
             downtime, data loss, or a lost link. Keep a copy of anything
             irreplaceable.
