@@ -201,19 +201,30 @@ export default function Home() {
               with no sign-up and no account. Just a title, and you&apos;ve
               got a link to send.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
               <Link
-                href="/play"
-                className="inline-block bg-accent px-8 py-3.5 text-xs font-medium tracking-[0.2em] text-white uppercase shadow-[0_8px_24px_-8px_rgba(156,63,91,0.4)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-10px_rgba(156,63,91,0.55)] active:translate-y-0"
+                href="/play#create"
+                prefetch={false}
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition-transform active:scale-95"
+                style={{ background: PLAY_COLORS.mint }}
               >
-                Try it free
+                📝 Make a Bucket List
+              </Link>
+              <Link
+                href="/play#create"
+                prefetch={false}
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition-transform active:scale-95"
+                style={{ background: PLAY_COLORS.coral }}
+              >
+                🧠 Take the Quiz
               </Link>
               <Link
                 href="/play/game"
                 prefetch={false}
-                className="text-xs font-medium tracking-[0.2em] text-accent uppercase underline underline-offset-4"
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-transform active:scale-95"
+                style={{ background: PLAY_COLORS.yellow, color: PLAY_COLORS.ink }}
               >
-                Play the game →
+                🎲 Play the Game
               </Link>
             </div>
           </Reveal>
