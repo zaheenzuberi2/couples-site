@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { BRAND, siteUrl } from "@/lib/env";
+import { HelpChat } from "@/components/chatbot/help-chat";
 import "./globals.css";
 
 // Font variables are named after the typeface, not the role. The @theme block
@@ -54,7 +56,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${display.variable} ${body.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <HelpChat />
+        <Analytics />
+      </body>
     </html>
   );
 }

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { setPaid } from "./actions";
+import { setContactHandled, setPaid } from "./actions";
 import DeleteSiteButton from "@/components/admin/delete-site-button";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatDateTime } from "@/lib/format";
 import { isAdminEmail, isSupabaseConfigured, siteUrl } from "@/lib/env";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -11,6 +11,16 @@ import type { Site } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Admin",
   robots: { index: false, follow: false },
+};
+
+type ContactRequest = {
+  id: string;
+  name: string;
+  phone: string;
+  message: string;
+  page: string;
+  handled: boolean;
+  created_at: string;
 };
 
 export default async function AdminPage() {
@@ -34,6 +44,14 @@ export default async function AdminPage() {
   const sites = (data ?? []) as Site[];
   const paidCount = sites.filter((s) => s.is_paid).length;
 
+  const { data: contactData } = await db
+    .from("contact_requests")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(100);
+  const contacts = (contactData ?? []) as ContactRequest[];
+  const openContacts = contacts.filter((c) => !c.handled).length;
+
   // Payment screenshots live in a private bucket - a signed URL is the only
   // way to view one, and it's generated fresh on every load of this page.
   const proofUrls = new Map<string, string>();
@@ -53,6 +71,8 @@ export default async function AdminPage() {
       <h1 className="font-display text-4xl">Admin</h1>
       <p className="mt-2 text-sm text-muted">
         {sites.length} website{sites.length === 1 ? "" : "s"} · {paidCount} paid
+        {" · "}
+        {openContacts} callback{openContacts === 1 ? "" : "s"} waiting
       </p>
 
       {sites.length === 0 ? (
@@ -157,6 +177,81 @@ export default async function AdminPage() {
                       siteId={site.id}
                       coupleName={`${site.partner_one} & ${site.partner_two}`}
                     />
+                  </Td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <h2 className="mt-16 font-display text-2xl">Callback requests</h2>
+      <p className="mt-1 text-sm text-muted">
+        Left in the help chat. Newest first.
+      </p>
+
+      {contacts.length === 0 ? (
+        <p className="mt-6 border border-dashed border-line px-6 py-10 text-center text-sm text-muted">
+          No one has asked for a callback yet.
+        </p>
+      ) : (
+        <div className="mt-6 overflow-x-auto">
+          <table className="w-full min-w-3xl border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-line text-left">
+                <Th>When</Th>
+                <Th>Name</Th>
+                <Th>Phone</Th>
+                <Th>About</Th>
+                <Th>From</Th>
+                <Th>Status</Th>
+                <Th> </Th>
+              </tr>
+            </thead>
+            <tbody>
+              {contacts.map((c) => (
+                <tr
+                  key={c.id}
+                  className={`border-b border-line align-middle ${c.handled ? "text-muted" : ""}`}
+                >
+                  <Td className="whitespace-nowrap text-muted">
+                    {formatDateTime(c.created_at)}
+                  </Td>
+                  <Td>{c.name || "No name"}</Td>
+                  <Td>
+                    <a
+                      href={`tel:${c.phone.replace(/\s+/g, "")}`}
+                      className="text-accent underline underline-offset-4"
+                    >
+                      {c.phone}
+                    </a>
+                  </Td>
+                  <Td className="max-w-xs">{c.message || "No note"}</Td>
+                  <Td className="text-muted">
+                    <code className="text-xs">{c.page || "?"}</code>
+                  </Td>
+                  <Td>
+                    {c.handled ? (
+                      <span className="text-muted">Done</span>
+                    ) : (
+                      <span className="text-amber-600">Waiting</span>
+                    )}
+                  </Td>
+                  <Td>
+                    <form action={setContactHandled}>
+                      <input type="hidden" name="id" value={c.id} />
+                      <input
+                        type="hidden"
+                        name="handled"
+                        value={c.handled ? "false" : "true"}
+                      />
+                      <button
+                        type="submit"
+                        className="border border-line px-3 py-1.5 text-xs tracking-[0.14em] uppercase hover:border-accent hover:text-accent"
+                      >
+                        {c.handled ? "Reopen" : "Mark done"}
+                      </button>
+                    </form>
                   </Td>
                 </tr>
               ))}

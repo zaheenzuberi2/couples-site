@@ -74,3 +74,20 @@ export async function deleteSite(formData: FormData): Promise<void> {
   revalidatePath("/admin");
   revalidatePath("/dashboard");
 }
+
+/**
+ * Clears a "call me back" request off the admin list once it has been
+ * actioned. Toggles rather than deletes, so the number stays on record.
+ */
+export async function setContactHandled(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const id = String(formData.get("id") ?? "");
+  const handled = formData.get("handled") === "true";
+  if (!id) return;
+
+  const db = createAdminClient();
+  await db.from("contact_requests").update({ handled }).eq("id", id);
+
+  revalidatePath("/admin");
+}

@@ -465,3 +465,27 @@ create policy "public reads quiz attempts" on public.play_quiz_attempts
   for select using (true);
 create policy "guest submits quiz attempt" on public.play_quiz_attempts
   for insert with check (true);
+
+-- ------------------------------------------------------------
+-- 6. Contact requests - the help chatbot's "call me back" box.
+--    A visitor leaves a phone number and an optional note; the
+--    owner works through them on /admin. No auth involved: the
+--    only writer is the submitContactRequest server action using
+--    the service-role client, which validates the number first.
+--    RLS is on with zero policies, so the anon key can neither
+--    read nor write this table - phone numbers are not public.
+-- ------------------------------------------------------------
+
+create table if not exists public.contact_requests (
+  id          uuid primary key default gen_random_uuid(),
+  name        text not null default '',
+  phone       text not null,
+  message     text not null default '',
+  page        text not null default '',
+  handled     boolean not null default false,
+  created_at  timestamptz not null default now()
+);
+create index if not exists contact_requests_idx
+  on public.contact_requests(handled, created_at desc);
+
+alter table public.contact_requests enable row level security;
