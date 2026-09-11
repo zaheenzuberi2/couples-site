@@ -43,6 +43,7 @@ export default async function AdminPage() {
 
   const sites = (data ?? []) as Site[];
   const paidCount = sites.filter((s) => s.is_paid).length;
+  const publishedCount = sites.filter((s) => s.is_paid && s.is_published).length;
 
   const { data: contactData } = await db
     .from("contact_requests")
@@ -51,6 +52,19 @@ export default async function AdminPage() {
     .limit(100);
   const contacts = (contactData ?? []) as ContactRequest[];
   const openContacts = contacts.filter((c) => !c.handled).length;
+
+  // Sign-ups come from auth, not a table this client can select from with
+  // a plain query - the admin API is the only way to count them. Capped at
+  // 1000, which is far past anything this product has seen so far.
+  const { data: usersData } = await db.auth.admin.listUsers({
+    page: 1,
+    perPage: 1000,
+  });
+  const signupCount = usersData?.users.length ?? 0;
+
+  const { count: playRoomCount } = await db
+    .from("play_rooms")
+    .select("id", { count: "exact", head: true });
 
   // Payment screenshots live in a private bucket - a signed URL is the only
   // way to view one, and it's generated fresh on every load of this page.
@@ -69,11 +83,31 @@ export default async function AdminPage() {
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-12">
       <h1 className="font-display text-4xl">Admin</h1>
-      <p className="mt-2 text-sm text-muted">
-        {sites.length} website{sites.length === 1 ? "" : "s"} · {paidCount} paid
-        {" · "}
-        {openContacts} callback{openContacts === 1 ? "" : "s"} waiting
-      </p>
+      <p className="mt-2 text-sm text-muted">A running count of everything happening on the product.</p>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          label="Sign-ups"
+          value={signupCount}
+          note="Total accounts, ever"
+        />
+        <StatCard
+          label="Websites"
+          value={sites.length}
+          note={`${paidCount} paid · ${publishedCount} live`}
+        />
+        <StatCard
+          label="Free tools used"
+          value={playRoomCount ?? 0}
+          note="Bucket lists & quizzes started"
+        />
+        <StatCard
+          label="Callbacks waiting"
+          value={openContacts}
+          note={`${contacts.length} total left in help chat`}
+          highlight={openContacts > 0}
+        />
+      </div>
 
       {sites.length === 0 ? (
         <p className="mt-12 border border-dashed border-line px-6 py-12 text-center text-sm text-muted">
@@ -260,6 +294,28 @@ export default async function AdminPage() {
         </div>
       )}
     </main>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  note,
+  highlight = false,
+}: {
+  label: string;
+  value: number;
+  note: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div
+      className={`border px-5 py-4 ${highlight ? "border-accent bg-accent-soft" : "border-line bg-card"}`}
+    >
+      <p className="text-xs tracking-[0.14em] text-muted uppercase">{label}</p>
+      <p className="mt-1.5 font-display text-4xl">{value}</p>
+      <p className="mt-1 text-xs text-muted">{note}</p>
+    </div>
   );
 }
 
