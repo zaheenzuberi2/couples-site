@@ -78,6 +78,15 @@ export const PRICE_LABEL = process.env.NEXT_PUBLIC_PRICE_LABEL ?? "PKR 4,000";
 export const BRAND = process.env.NEXT_PUBLIC_BRAND ?? "Ours";
 
 /**
+ * The content value Google Search Console gives you for the "HTML tag"
+ * verification method (just the value, not the whole <meta> tag). Empty
+ * until you add a Search Console property - see app/layout.tsx, which
+ * only renders the tag when this is set.
+ */
+export const GOOGLE_SITE_VERIFICATION =
+  process.env.GOOGLE_SITE_VERIFICATION ?? "";
+
+/**
  * Bank details shown to a couple when they're ready to pay. Manual transfer
  * is the only payment path today - see [[couples-website-builder]] memory
  * for why (Stripe doesn't operate in Pakistan). Env-overridable so the

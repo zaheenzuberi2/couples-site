@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { BRAND, siteUrl } from "@/lib/env";
+import { BRAND, GOOGLE_SITE_VERIFICATION, siteUrl } from "@/lib/env";
 import { HelpChat } from "@/components/chatbot/help-chat";
 import "./globals.css";
 
@@ -37,6 +37,12 @@ export const metadata: Metadata = {
   icons: {
     other: { rel: "icon", url: "/brand-logo", sizes: "512x512" },
   },
+  // Set once: paste the "content" value from Search Console's HTML tag
+  // method into GOOGLE_SITE_VERIFICATION in Vercel's env vars. Left out of
+  // the page entirely until then, rather than rendering an empty tag.
+  ...(GOOGLE_SITE_VERIFICATION && {
+    verification: { google: GOOGLE_SITE_VERIFICATION },
+  }),
 };
 
 // Overridden per couple page (their own theme) and on the marketing
